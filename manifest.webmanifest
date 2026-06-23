@@ -1,0 +1,17 @@
+{
+  "name": "MY儀式",
+  "short_name": "MY儀式",
+  "description": "見るまで確定じゃない。結果直前の祈り行動を記録するミニ診断。",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#080409",
+  "theme_color": "#140712",
+  "icons": [
+    {
+      "src": "./assets/ui/app_icon_mygishiki.png",
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

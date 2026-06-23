@@ -9,17 +9,29 @@
   <meta property="og:description" content="連打する。なでる。隠す。見ないふりをする。あなたのMY儀式を診断します。">
   <meta property="og:type" content="website">
   <meta property="og:image" content="./assets/ogp.png">
+  <meta name="theme-color" content="#140712">
+  <link rel="icon" type="image/png" sizes="1254x1254" href="./assets/ui/app_icon_mygishiki.png">
+  <link rel="apple-touch-icon" href="./assets/ui/app_icon_mygishiki.png">
+  <link rel="manifest" href="./manifest.webmanifest">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
   <main id="app" class="app">
-    <section id="intro" class="intro-screen">
-      <div class="intro-inner">
-        <p class="eyebrow">見るまで確定じゃない</p>
-        <img class="title-logo" src="./assets/logo.png" alt="MY儀式">
-        <p class="lead">結果が出る、その直前。<br>人はなぜか、ちょっと変なことをする。</p>
-        <p class="body-text">連打する。なでる。隠す。見ないふりをする。<br>意味はないかもしれない。でも、あの数秒だけは、やらずにいられない。</p>
-        <button id="startBtn" class="primary-btn">結果の手前へ</button>
+    <section id="intro" class="intro-screen grimoire-screen">
+      <div class="intro-inner sealed-notebook">
+        <span class="notebook-warning" aria-hidden="true">※ 深夜二時以降 閲覧注意</span>
+        <div class="intro-logo-sheet">
+          <img class="title-logo" src="./assets/ui/logo_mygishiki.png" alt="MY儀式">
+        </div>
+        <p class="intro-subcopy">見るまで確定じゃない</p>
+        <div class="intro-incantation">
+          <p>結果が出る直前、人はなぜか変なことをする。</p>
+          <p class="ritual-verbs"><span>連打する</span><span>なでる</span><span>隠す</span><span>見ないふりをする</span></p>
+          <p>それは祈りか、黒歴史か。<br>これは、あなたの「MY儀式」の記録です。</p>
+        </div>
+        <div class="seal-row" aria-hidden="true"><i></i><img src="./assets/ui/app_icon_mygishiki.png" alt=""><i></i></div>
+        <button id="startBtn" class="primary-btn ritual-start"><span>封印ノートを開く</span><small>OPEN THE ARCHIVE</small></button>
+        <p class="handwritten-note" aria-hidden="true">消したはずの儀式ほど、よく覚えている。</p>
       </div>
     </section>
 
@@ -35,12 +47,16 @@
       </div>
     </section>
 
-    <section id="result" class="result-screen hidden">
-      <div class="result-card">
-        <p class="eyebrow">診断結果</p>
+    <section id="result" class="result-screen archive-screen hidden">
+      <div class="result-card ritual-report">
+        <header class="result-brand">
+          <img class="result-brand-logo" src="./assets/ui/logo_mygishiki.png" alt="MY儀式">
+          <img class="result-seal-icon" src="./assets/ui/app_icon_mygishiki.png" alt="" aria-hidden="true">
+        </header>
+        <p class="eyebrow report-kicker">封印解除済み・黒歴史儀式診断書</p>
         <div class="result-heading">
           <img id="resultIcon" class="result-icon" alt="">
-          <div><span class="result-label">あなたのMY儀式タイプ</span><h1 id="resultType"></h1></div>
+          <div><span class="result-label">MY儀式タイプ</span><h1 id="resultType"></h1></div>
         </div>
         <p id="resultSummary" class="result-summary"></p>
         <p class="behavior"><strong>主な祈り行動</strong><span id="resultBehavior"></span></p>
@@ -61,11 +77,11 @@
           </div>
           <p id="fortuneComment"></p>
         </section>
-        <p class="evidence">科学的根拠：<strong>なし</strong></p>
-        <h2>ステージ別・祈りの記録</h2>
+        <p class="evidence"><span>科学的根拠</span><strong>なし</strong><small>※魔力測定も未実施</small></p>
+        <h2 class="archive-heading">封印記録：ステージ別ログ</h2>
         <div id="finalLog" class="final-log"></div>
         <div class="actions">
-          <button id="shareBtn" class="primary-btn">結果をコピー</button>
+          <button id="shareBtn" class="primary-btn">結果をシェア</button>
           <button id="restartBtn" class="ghost-btn">もう一度</button>
         </div>
         <p id="copyStatus" class="copy-status"></p>

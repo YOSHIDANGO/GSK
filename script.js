@@ -69,11 +69,12 @@ function freshLog(stage) {
 }
 
 function stageMarkup(stage) {
-  const bg = `<img class="experience-bg" src="${asset(stage.images.idle)}" alt="" draggable="false">`;
-  if (stage.id === "slot") return `<section class="experience-stage stage-slot">${bg}<div class="stage-overlay"><button class="hotspot hotspot-lamp" data-action="lamp" aria-label="ランプに触れる"></button><button class="hotspot hotspot-lever" data-action="lever" aria-label="レバーを引く"></button><div class="hotspot-stop-buttons" aria-label="停止ボタン"><button class="hotspot stop-one" data-action="stop" aria-label="左の停止ボタン"></button><button class="hotspot stop-two" data-action="stop" aria-label="中央の停止ボタン"></button><button class="hotspot stop-three" data-action="stop" aria-label="右の停止ボタン"></button></div><div class="lamp-glow" aria-hidden="true"></div><div class="outcome-layer" aria-hidden="true"><p></p></div><p class="experience-hint">ランプ、ボタン、レバー。気になるところへ。</p></div></section>`;
-  if (stage.id === "ball") return `<section class="experience-stage stage-ball">${bg}<div class="stage-overlay"><button class="hotspot hotspot-ball-screen" data-action="screen" aria-label="バトル画面に触れる"></button><div class="capsule-shake" aria-hidden="true"></div><div class="screen-flash" aria-hidden="true"></div><div class="battle-message" aria-live="polite">カプセルボールが、まだ揺れている。</div><div class="handheld-controls"><div class="dpad" aria-label="十字キー"><button data-action="dpad-up" aria-label="上"></button><button data-action="dpad-left" aria-label="左"></button><span></span><button data-action="dpad-right" aria-label="右"></button><button data-action="dpad-down" aria-label="下"></button></div><div class="system-buttons"><button data-action="select">SELECT</button><button data-action="start">START</button></div><div class="ab-buttons"><button class="button-b" data-action="b">B</button><button class="button-a" data-action="a">A</button></div></div></div></section>`;
-  if (stage.id === "gacha") return `<section class="experience-stage stage-gacha">${bg}<div class="stage-overlay"><div class="last-pull-note">所持結晶 1　残り一回</div><button class="hotspot hotspot-gacha" data-action="gacha" aria-label="一回召喚する"></button><div class="gacha-curtain" aria-hidden="true"><i></i><i></i></div><div class="gacha-light" aria-hidden="true"></div><div class="outcome-layer" aria-hidden="true"><p></p></div><p class="experience-hint">押す前の一秒まで、あなたのもの。</p></div></section>`;
-  if (stage.id === "mail") return `<section class="experience-stage stage-mail">${bg}<div class="stage-overlay"><button class="hotspot hotspot-envelope" data-action="envelope" aria-label="抽選結果の封筒を開く"></button><div class="mail-cover" aria-hidden="true">まだ見ない</div><div class="mail-result-card" aria-live="polite"><small>抽選結果</small><strong></strong><span></span></div><p class="experience-hint">封筒は、急がせてこない。</p></div></section>`;
+  const image = asset(stage.images.idle);
+  const bg = `<img class="experience-backdrop" src="${image}" alt="" aria-hidden="true" draggable="false"><img class="experience-bg" src="${image}" alt="" draggable="false">`;
+  if (stage.id === "slot") return `<section class="experience-stage stage-slot">${bg}<div class="stage-overlay"><button class="hotspot hotspot-lamp" data-action="lamp" aria-label="ランプに触れる"></button><button class="hotspot hotspot-lever" data-action="lever" aria-label="レバーを引く"></button><div class="hotspot-stop-buttons" aria-label="停止ボタン"><button class="hotspot stop-one" data-action="stop" aria-label="左の停止ボタン"></button><button class="hotspot stop-two" data-action="stop" aria-label="中央の停止ボタン"></button><button class="hotspot stop-three" data-action="stop" aria-label="右の停止ボタン"></button></div><div class="lamp-glow" aria-hidden="true"></div><p class="experience-hint">ランプ、ボタン、レバー。気になるところへ。</p></div></section>`;
+  if (stage.id === "ball") return `<section class="experience-stage stage-ball">${bg}<div class="stage-overlay"><button class="hotspot hotspot-ball-screen" data-action="screen" aria-label="バトル画面に触れる"></button><div class="capsule-shake" aria-hidden="true"></div><div class="screen-flash" aria-hidden="true"></div><div class="handheld-controls"><div class="dpad" aria-label="十字キー"><button data-action="dpad-up" aria-label="上"></button><button data-action="dpad-left" aria-label="左"></button><span></span><button data-action="dpad-right" aria-label="右"></button><button data-action="dpad-down" aria-label="下"></button></div><div class="system-buttons"><button data-action="select" aria-label="SELECT"></button><button data-action="start" aria-label="START"></button></div><div class="ab-buttons"><button class="button-b" data-action="b" aria-label="Bボタン"></button><button class="button-a" data-action="a" aria-label="Aボタン"></button></div></div></div></section>`;
+  if (stage.id === "gacha") return `<section class="experience-stage stage-gacha">${bg}<div class="stage-overlay"><button class="hotspot hotspot-gacha" data-action="gacha" aria-label="一回召喚する"></button><div class="gacha-curtain" aria-hidden="true"><i></i><i></i></div><div class="gacha-light" aria-hidden="true"></div><p class="experience-hint">押す前の一秒まで、あなたのもの。</p></div></section>`;
+  if (stage.id === "mail") return `<section class="experience-stage stage-mail">${bg}<div class="stage-overlay"><button class="hotspot hotspot-envelope" data-action="envelope" aria-label="抽選結果の封筒を開く"></button><div class="mail-cover" aria-hidden="true"></div><p class="experience-hint">封筒は、急がせてこない。</p></div></section>`;
   return `<section class="experience-stage stage-exam">${bg}<div class="stage-overlay"><button class="hotspot hotspot-exam-button" data-action="exam" aria-label="結果を表示する"></button><button class="hotspot hotspot-exam-result" data-action="exam-result" aria-label="結果欄を少しずつ見る"></button><div class="exam-loading" aria-live="polite"><i></i><span>照会しています</span></div><div class="exam-result-panel" aria-live="polite"><small>照会結果</small><strong></strong><p></p><button type="button" data-action="peek">少しだけ見る</button></div><div class="exam-curtain" aria-hidden="true"></div></div></section>`;
 }
 
@@ -108,8 +109,9 @@ function setStageState(state) {
   if (state === "resolving" || state === "loading") experience.classList.add("is-resolving");
   if (state === "win" || state === "lose") experience.classList.add("is-revealed", `is-${state}`);
   const imageState = state === "loading" ? "resolving" : state;
-  const image = experience.querySelector(".experience-bg");
-  if (image && stage.images[imageState]) image.src = asset(stage.images[imageState]);
+  experience.querySelectorAll(".experience-bg, .experience-backdrop").forEach(image => {
+    if (stage.images[imageState]) image.src = asset(stage.images[imageState]);
+  });
 }
 function noteInput() { lastInputAt = performance.now(); }
 
@@ -171,10 +173,7 @@ function revealResult() {
   const isWin = Math.random() < 0.5;
   currentLog.result = isWin ? "成功" : "失敗"; resolving = false; resolved = true;
   setStageState(isWin ? "win" : "lose");
-  experience.querySelector(".outcome-layer p")?.replaceChildren(document.createTextNode(isWin ? stage.winText : stage.loseText));
-  if (stage.id === "ball") experience.querySelector(".battle-message").textContent = isWin ? stage.winText : stage.loseText;
-  if (stage.id === "mail") { const card = experience.querySelector(".mail-result-card"); card.querySelector("strong").textContent = isWin ? "当選" : "落選"; card.querySelector("span").textContent = isWin ? "お席をご用意しました" : "今回はご用意できませんでした"; }
-  if (stage.id === "exam") { const panel = experience.querySelector(".exam-result-panel"); panel.querySelector("strong").textContent = isWin ? "合格" : "不合格"; panel.querySelector("p").textContent = isWin ? "おめでとうございます。" : "今回の結果は不合格でした。"; }
+  if (stage.id === "exam") { const panel = experience.querySelector(".exam-result-panel"); panel.querySelector("strong").textContent = isWin ? "合格" : "不合格"; panel.querySelector("p").textContent = isWin ? "おめでとうございます。あなたは合格です。" : "今回は合格基準に達しませんでした。"; }
   el.whisper.textContent = isWin ? stage.winText : stage.loseText; el.nextBtn.textContent = current === stages.length - 1 ? "MY儀式を診断する" : "次の結果へ"; el.nextBtn.classList.remove("hidden");
 }
 function nextStage() {
@@ -230,7 +229,41 @@ function showResult() {
   el.fortuneComment.textContent = fortune.comment;
   el.finalLog.innerHTML = stageLogs.map(log => `<article><header><strong>${log.stageTitle}</strong><span>${log.result}</span></header><p>${logSummary(log)}</p><small>ためらい ${(log.hesitationMs / 1000).toFixed(1)}秒 / 結果待ちの無操作 ${(log.waitNoInputMs / 1000).toFixed(1)}秒</small></article>`).join("");
 }
-function shareText() { return ["MY儀式 診断結果", `タイプ：${el.resultType.textContent}`, `今日の運勢：${el.fortuneRank.textContent}`, `当たり数：${el.fortuneHits.textContent}`, `信仰心：${el.scoreFaith.textContent}`, `ためらい：${el.scoreHesitation.textContent}`, `現実逃避：${el.scoreAvoidance.textContent}`, `人間味：${el.scoreHuman.textContent}`, "科学的根拠：なし", "", "見るまで確定じゃない。", "#MY儀式"].join("\n"); }
-async function copyResult() { try { await navigator.clipboard.writeText(shareText()); el.copyStatus.textContent = "コピーしました。あとは貼るだけ。"; } catch { el.copyStatus.textContent = "コピーできませんでした。ブラウザの権限をご確認ください。"; } }
+function buildShareText() { return ["MY儀式 診断結果", `タイプ：${el.resultType.textContent}`, `今日の運勢：${el.fortuneRank.textContent}`, `当たり数：${el.fortuneHits.textContent}`, `信仰心：${el.scoreFaith.textContent}`, `ためらい：${el.scoreHesitation.textContent}`, `現実逃避：${el.scoreAvoidance.textContent}`, `人間味：${el.scoreHuman.textContent}`, "", "見るまで確定じゃない。", "#MY儀式"].join("\n"); }
+async function shareResult() {
+  const text = buildShareText();
+  const shareData = { title: "MY儀式", text, url: location.href };
+  el.copyStatus.textContent = "";
 
-el.startBtn.addEventListener("click", startGame); el.nextBtn.addEventListener("click", nextStage); el.restartBtn.addEventListener("click", startGame); el.shareBtn.addEventListener("click", copyResult);
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+      return;
+    } catch (error) {
+      if (error?.name === "AbortError") return;
+      try {
+        await navigator.clipboard.writeText(text);
+        el.copyStatus.textContent = "シェアできないため結果をコピーしました。";
+      } catch {
+        el.copyStatus.textContent = "シェアできませんでした。";
+      }
+      return;
+    }
+  }
+
+  const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`;
+  const popup = window.open(xUrl, "_blank");
+  if (popup) {
+    popup.opener = null;
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(text);
+    el.copyStatus.textContent = "シェア画面を開けないため結果をコピーしました。";
+  } catch {
+    el.copyStatus.textContent = "シェアできませんでした。";
+  }
+}
+
+el.startBtn.addEventListener("click", startGame); el.nextBtn.addEventListener("click", nextStage); el.restartBtn.addEventListener("click", startGame); el.shareBtn.addEventListener("click", shareResult);

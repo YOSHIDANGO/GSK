@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>MY儀式｜見るまで確定じゃない</title>
+  <meta name="description" content="結果を見る直前、なぜか出てしまうあなたの祈り行動を記録するミニ診断。">
+  <meta property="og:title" content="MY儀式｜見るまで確定じゃない">
+  <meta property="og:description" content="連打する。なでる。隠す。見ないふりをする。あなたのMY儀式を診断します。">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="./assets/ogp.png">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main id="app" class="app">
+    <section id="intro" class="intro-screen">
+      <div class="intro-inner">
+        <p class="eyebrow">見るまで確定じゃない</p>
+        <img class="title-logo" src="./assets/logo.png" alt="MY儀式">
+        <p class="lead">結果が出る、その直前。<br>人はなぜか、ちょっと変なことをする。</p>
+        <p class="body-text">連打する。なでる。隠す。見ないふりをする。<br>意味はないかもしれない。でも、あの数秒だけは、やらずにいられない。</p>
+        <button id="startBtn" class="primary-btn">結果の手前へ</button>
+      </div>
+    </section>
+
+    <section id="game" class="game-screen hidden" aria-live="polite">
+      <header class="stage-hud">
+        <div><span id="stageCount">1 / 5</span><strong id="stageTitle">兆しのランプ</strong></div>
+        <p id="stagePrompt">光るかどうかは、まだ見ない。</p>
+      </header>
+      <div id="experienceMount"></div>
+      <div class="stage-footer">
+        <p id="stageWhisper" class="stage-whisper"></p>
+        <button id="nextBtn" class="next-btn hidden">次の結果へ</button>
+      </div>
+    </section>
+
+    <section id="result" class="result-screen hidden">
+      <div class="result-card">
+        <p class="eyebrow">診断結果</p>
+        <div class="result-heading">
+          <img id="resultIcon" class="result-icon" alt="">
+          <div><span class="result-label">あなたのMY儀式タイプ</span><h1 id="resultType"></h1></div>
+        </div>
+        <p id="resultSummary" class="result-summary"></p>
+        <p class="behavior"><strong>主な祈り行動</strong><span id="resultBehavior"></span></p>
+        <div class="score-grid">
+          <div><span>信仰心</span><strong id="scoreFaith">0</strong></div>
+          <div><span>ためらい</span><strong id="scoreHesitation">0</strong></div>
+          <div><span>現実逃避</span><strong id="scoreAvoidance">0</strong></div>
+          <div><span>人間味</span><strong id="scoreHuman">0</strong></div>
+        </div>
+        <section class="fortune-card" aria-labelledby="fortuneTitle">
+          <div>
+            <span>当たり数</span>
+            <strong id="fortuneHits">0 / 5</strong>
+          </div>
+          <div>
+            <span id="fortuneTitle">今日の運勢</span>
+            <strong id="fortuneRank"></strong>
+          </div>
+          <p id="fortuneComment"></p>
+        </section>
+        <p class="evidence">科学的根拠：<strong>なし</strong></p>
+        <h2>ステージ別・祈りの記録</h2>
+        <div id="finalLog" class="final-log"></div>
+        <div class="actions">
+          <button id="shareBtn" class="primary-btn">結果をコピー</button>
+          <button id="restartBtn" class="ghost-btn">もう一度</button>
+        </div>
+        <p id="copyStatus" class="copy-status"></p>
+      </div>
+    </section>
+  </main>
+  <script src="./script.js"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+# MY儀式
+
+**見るまで確定じゃない。**
+
+結果が出る直前、つい連打する、なでる、隠す、見ないふりをする――そんな行動を5つの疑似体験画面で記録し、最後に「MY儀式タイプ」と今日の運勢を表示するWebミニゲームです。
+
+既存IP・実在ゲーム・実在機種には依存しない、結果待ちの人間あるあるとして制作しています。
+
+## 画面構成
+
+各ステージは次の状態を持ちます。
+
+```text
+intro → idle → resolving/loading → win または lose → 次のintro
+```
+
+- `intro`：その場面で何を願い、なぜ何かしたくなるのかを短く紹介
+- `idle`：実際に触れる疑似体験画面
+- `resolving`：結果待ち。状態画像への切り替えとCSS演出を実行
+- `loading`：合否発表専用の照会中状態
+- `win` / `lose`：結果画像またはHTML/CSS結果パネルを表示
+
+プレイ中には診断ログを表示しません。ログは最終診断だけで確認できます。
+
+## ステージ、導入文、使用画像
+
+素材はすべて実装用ファイル名で `assets/` に配置済みです。
+
+### 1. ステージ1：兆しのランプ
+
+ランプが光れば大当たり。レバーを叩く前に、ランプをなでる、ボタンを押す、少し間を置く――意味は不明でも、光ってほしいときにできることを試す場面です。
+
+- `assets/stage1_slot_base.png`：`idle` / `lose`
+- `assets/stage1_slot_spinning.png`：`resolving`
+- `assets/stage1_slot_win.png`：`win`
+- 開始ボタン：`レバーの前へ`
+
+ランプ、レバー、3つの停止ボタンに透明ホットスポットを置きます。回転中は細かな振動とブラー、当たり時は発光、ハズレ時は暗い余韻を重ねます。
+
+### 2. ステージ2：最後の封印
+
+伝説級のモンスターを、最後のカプセルボールひとつで捕まえる場面です。A連打、B長押し、十字キー下入力を試せる余白を残しています。
+
+- `assets/stage2_battle_base.png`：`idle`
+- `assets/stage2_battle_capturing.png`：`resolving`
+- `assets/stage2_battle_success.png`：`win`
+- `assets/stage2_battle_fail.png`：`lose`
+- 開始ボタン：`カプセルを構える`
+
+十字キー、A、B、START、SELECTはHTMLのボタンです。新素材に描かれた本体の操作部へ透明なボタンを重ね、押下時だけCSSで反応を出します。捕獲中は約3.2秒取り、3回程度の揺れ、成功フラッシュ、失敗時の画面揺れを加えます。
+
+### 3. ステージ3：最後の一回
+
+無課金で貯めた石も残り一回分。押す前になでる、長押しする、少し待つなど、最後の一回を引く直前の間を体験します。
+
+- `assets/stage3_gacha_top.png`：`idle`
+- `assets/stage3_gacha_drawing.png`：`resolving`
+- `assets/stage3_gacha_win.png`：`win`
+- `assets/stage3_gacha_lose.png`：`lose`
+- 開始ボタン：`召喚画面へ`
+
+召喚ボタン上にホットスポットを置き、暗転、光の収束、虹／金系の当たりフラッシュ、青白いハズレの余韻を追加します。
+
+### 4. ステージ4：当落のお知らせ
+
+開ければ当落が確定する通知です。開けなければ、まだ落ちていない。封筒へのタップ、長押し、なで、開封までの時間を記録します。
+
+- `assets/stage4_lottery_base.png`：`idle`
+- `assets/stage4_lottery_opening.png`：`resolving`
+- `assets/stage4_lottery_win.png`：`win`
+- `assets/stage4_lottery_lose.png`：`lose`
+- 開始ボタン：`通知を確認する`
+
+開封中は紙が浮くような動き、当選時は控えめな祝福光、落選時は静かな暗転を重ねます。
+
+### 5. ステージ5：結果照会
+
+受験番号は入力済みで、あとは結果表示ボタンを押すだけ。押すまでのためらい、結果欄外へのタップ、少しずつ見る操作を記録します。
+
+- `assets/stage5_exam_base.png`：全状態の背景
+- 開始ボタン：`結果ページへ`
+
+このステージだけは画像1枚を使い、`loading`、合格、不合格、結果を覆うカーテンをHTML/CSSで実装します。照会中は約2.2秒。結果パネルは公的ページ風に抑え、下から段階的に表示します。
+
+## 当たり確率と今日の運勢
+
+全ステージの当たり判定は次の固定50%です。
+
+```js
+const isWin = Math.random() < 0.5;
+```
+
+祈り行動による確率補正はありません。操作ログはMY儀式タイプ判定と4指標にだけ使います。
+
+最終画面では5ステージ中の当たり数から今日の運勢を表示します。
+
+| 当たり数 | 運勢ランク |
+|---:|---|
+| 0 / 5 | 逆神の日 |
+| 1 / 5 | 低空飛行 |
+| 2 / 5 | 普通の日 |
+| 3 / 5 | なかなか持ってる |
+| 4 / 5 | かなり強い |
+| 5 / 5 | 豪運 |
+
+## 診断ログ
+
+共通ログ：タップ、なで、長押し時間、結果操作までの時間、結果待ち中の無操作時間。
+
+具体ログ：
+
+- `lampTouches`
+- `leverPulls`
+- `stopButtonTaps`
+- `aButtonTaps`
+- `bButtonHolds`
+- `dpadDownTaps`
+- `screenTapsDuringCapture`
+- `gachaButtonHolds`
+- `gachaHesitationMs`
+- `envelopeTouches`
+- `envelopeHesitationMs`
+- `examHesitationMs`
+- `outsideTaps`
+- `examPeeks`
+
+タイプ判定と4指標は `script.js` の `analyzeLogs()`、ステージ別表示は `logSummary()`、運勢は `getFortune()` で調整できます。
+
+## ホットスポットの調整
+
+ホットスポットは `script.js` の `stageMarkup()` で生成し、`style.css` の `.hotspot-*` に割合座標を定義しています。
+
+```css
+.hotspot-gacha {
+  left: 27%;
+  top: 78%;
+  width: 45%;
+  height: 9%;
+}
+```
+
+位置確認時は `.game-screen` または任意の親要素へ `debug-hotspots` クラスを付けると、操作範囲が半透明の赤で表示されます。素材の構図を変更した場合は、この割合座標を調整してください。
+
+## ローカル確認
+
+静的サイトのため、`index.html` をブラウザで開くか、任意のローカルサーバーでルートディレクトリを配信してください。追加ビルドは不要です。
+
+従来の装飾・診断アイコンを素材シートから再生成する場合のみ、Python 3とPillowを用意して次を実行します。
+
+```bash
+python tools/crop_assets.py
+```

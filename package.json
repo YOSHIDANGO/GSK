@@ -1,0 +1,9 @@
+{
+  "name": "my-gishiki-base",
+  "version": "0.1.0",
+  "private": true,
+  "description": "MY儀式 - 結果を見る直前の祈り行動を記録するWebミニゲーム",
+  "scripts": {
+    "start": "npx serve ."
+  }
+}

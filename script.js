@@ -1,21 +1,21 @@
 const stages = [
   {
-    id: "slot", title: "ステージ1：兆しのランプ", count: "1 / 5", prompt: "光るかどうかは、まだ見ない。", startLabel: "レバーの前へ",
+    id: "slot", title: "ステージ1：兆しのランプ", count: "1 / 5", prompt: "光るかどうかは、まだ見ない。", startLabel: "台に座る",
     intro: ["これは、ランプが光れば大当たりのスロットゲームです。", "レバーを叩く前に、ランプをなでる、ボタンを押す、少し間を置く。", "意味があるかはわかりません。でも、光ってほしいなら、今できることをしてからレバーオンしてください。"],
     images: { idle: "stage1_slot_base.png", resolving: "stage1_slot_spinning.png", win: "stage1_slot_win.png", lose: "stage1_slot_base.png" },
     winText: "BONUS確定", loseText: "……ランプは光らない。"
   },
   {
-    id: "ball", title: "ステージ2：最後の封印", count: "2 / 5", prompt: "残るカプセルボールは、これひとつ。", startLabel: "カプセルを構える",
-    intro: ["目の前に、伝説級のモンスターが現れました。", "手元に残っているのは、カプセルボールがひとつだけ。投げたあとは、揺れるカプセルを見守るしかありません。", "Aを押すのか、Bを押しっぱなしにするのか、下を押すのか。自分だけのやり方で、なんとかゲットしてください。"],
+    id: "ball", title: "ステージ2：最後の封印", count: "2 / 5", prompt: "残るカプセルボールは、これひとつ。", startLabel: "ボールを構える",
+    intro: ["目の前に、伝説級のモンスターが現れました。", "手元に残っているのは、カプセルボールがひとつだけ。投げたあとは、揺れるボールを見守るしかありません。", "Aを押すのか、Bを押しっぱなしにするのか、下を押すのか。自分だけのやり方で、なんとかゲットしてください。"],
     images: { idle: "stage2_battle_base.png", resolving: "stage2_battle_capturing.png", win: "stage2_battle_success.png", lose: "stage2_battle_fail.png" },
-    winText: "カプセルボールに封じ込めた！", loseText: "惜しい。封印がほどけた。"
+    winText: "モンスターGETだぜ！", loseText: "……惜しい。逃げられた。"
   },
   {
     id: "gacha", title: "ステージ3：最後の一回", count: "3 / 5", prompt: "石はひとつ。押せるのも一度だけ。", startLabel: "召喚画面へ",
     intro: ["レアキャラを引くために、これまで無課金で貯めてきた石。", "その石も、あと1回分だけになってしまいました。ここで引けなければ、次はいつになるかわかりません。", "画面をなでるか、長押しするか、少し待つか。押す瞬間は、あなたに任されています。"],
     images: { idle: "stage3_gacha_top.png", resolving: "stage3_gacha_drawing.png", win: "stage3_gacha_win.png", lose: "stage3_gacha_lose.png" },
-    winText: "特別な気配が現れた。", loseText: "いつもの光が、静かに消えた。"
+    winText: "神引き！！", loseText: "またゴミだ"
   },
   {
     id: "mail", title: "ステージ4：当落のお知らせ", count: "4 / 5", prompt: "開けなければ、まだ落ちていない。", startLabel: "通知を確認する",
@@ -32,13 +32,68 @@ const stages = [
 ];
 
 const typeDefs = {
-  resonance: { name: "本体共鳴型シャーマン", icon: "type_resonance.png", behavior: "ランプや画面の動きへ、指先を同期させる", summary: "機械が揺れれば、こちらの気持ちも揺れる。対象と動きを合わせて運命に相づちを打つタイプです。確率との関係は未確認ですが、呼吸はかなり合っています。" },
-  mash: { name: "連打祈祷型", icon: "type_mash.png", behavior: "停止ボタンやAボタンへ、考える前に念を送る", summary: "できることがあるなら、まず押す。もう一度押す。指先の忙しさで不安を追い越すタイプです。一打に意味がなくても、全部には少し意味がある気がします。" },
-  hide: { name: "隠蔽確認型", icon: "type_hide.png", behavior: "結果を覆い、少しずつ視界へ入れる", summary: "見なければ、悪い結果はまだ届いていない。視界を閉じて心の読み込み時間を確保するタイプです。もちろん最後には、ちゃんと隙間から確認します。" },
-  stroke: { name: "なで信仰型", icon: "type_stroke.png", behavior: "ランプも封筒も画面も、ひとまず丁寧になでる", summary: "機械にも通知にも礼儀正しくお願いするタイプです。優しくすれば結果も優しくなる。そんな未確認の互恵関係を、あなたはまだ諦めていません。" },
-  timing: { name: "間合い調整型", icon: "type_timing.png", behavior: "押せるボタンを前に、ちょうどいい一拍を探す", summary: "すぐには押さない。早すぎず遅すぎない、運命の間合いを読むタイプです。結果が決まっていても、受け取るタイミングくらいはこちらで選びたいのです。" },
-  stare: { name: "無言凝視型", icon: "type_stare.png", behavior: "余計な入力をせず、結果の気配を見つめ続ける", summary: "動かないことが最大の祈り。外からは静かでも、内側はかなり騒がしいタイプです。何もしないという儀式は、思っているより体力を使います。" },
-  escape: { name: "読み込み逃避型", icon: "type_escape.png", behavior: "結果欄の外を触り、見る瞬間を小分けにする", summary: "結果が来る直前だけ、別の場所が気になるタイプです。逃げ道を一本残すことで、ちゃんと戻ってこられます。それも立派な人間の知恵です。" }
+resonance: {
+name: "本体シンクロ型",
+title: "筐体と心拍を合わせし者",
+icon: "type_resonance.png",
+behavior: "光る場所、揺れる画面、動く演出に合わせて指を動かす",
+summary: "あなたは、画面や本体の動きに自分の気持ちを合わせるタイプです。ランプが光りそうな瞬間、ボールが揺れる瞬間、演出が強くなる瞬間に、なぜか指先も一緒に動きます。運命に直接触れている気がするタイプです。",
+reason: "ランプや画面への接触、演出中のタップが多いと出やすいタイプです。"
+},
+
+mash: {
+name: "連打祈祷型",
+title: "Aボタンに魂を込めし者",
+icon: "type_mash.png",
+behavior: "Aボタン、停止ボタン、決定ボタンをとにかく押す",
+summary: "あなたは、何もしない時間に耐えられないタイプです。結果が出るまでの数秒、指だけは止まりません。効くかどうかは分からない。でも押している間だけは、まだ自分が運命に参加できている気がします。",
+reason: "Aボタン連打、停止ボタン連打、画面タップが多いと出やすいタイプです。"
+},
+
+hide: {
+name: "見ないふり型",
+title: "結果を封印せし者",
+icon: "type_hide.png",
+behavior: "結果を隠す、視線を外す、少しずつ見る",
+summary: "あなたは、結果を一気に受け止めるのが苦手なタイプです。見なければ、まだ悪い結果は確定していません。指や視線で少しだけ逃げ道を作りながら、最後はちゃんと確認します。",
+reason: "隠す操作、結果欄外タップ、少しずつ見る行動が多いと出やすいタイプです。"
+},
+
+stroke: {
+name: "なで祈願型",
+title: "対象と和解せし者",
+icon: "type_stroke.png",
+behavior: "ランプ、封筒、画面を丁寧になでる",
+summary: "あなたは、強く押すより優しくお願いするタイプです。ランプにも、封筒にも、ガチャ画面にも、まずは礼儀があります。結果に直接効く根拠はありませんが、雑に扱うよりは良い気がしています。",
+reason: "なで操作、ランプ接触、封筒接触が多いと出やすいタイプです。"
+},
+
+timing: {
+name: "間合い読み型",
+title: "押す瞬間を選びし者",
+icon: "type_timing.png",
+behavior: "ボタンを押す前に、少し待つ",
+summary: "あなたは、すぐ押せるボタンを前にしても、あえて一拍置くタイプです。早すぎても違う。遅すぎても違う。運命の結果が決まっていたとしても、押すタイミングだけは自分で選びたい人です。",
+reason: "レバーオン、召喚、開封、結果表示の前にためらい時間が長いと出やすいタイプです。"
+},
+
+stare: {
+name: "凝視念力型",
+title: "無言で圧をかけし者",
+icon: "type_stare.png",
+behavior: "余計な操作をせず、画面を見つめる",
+summary: "あなたは、動かずに祈るタイプです。外から見ると何もしていないように見えますが、内側ではかなり強めに念を送っています。連打もしない、隠しもしない。ただ見届ける。それも立派な儀式です。",
+reason: "操作が少なく、結果待ち中の無操作時間が長いと出やすいタイプです。"
+},
+
+escape: {
+name: "読み込み逃避型",
+title: "結果直前に別の場所を触りし者",
+icon: "type_escape.png",
+behavior: "結果欄の外を触る、違う場所を見て時間を稼ぐ",
+summary: "あなたは、結果が出る直前になると急に別の場所が気になるタイプです。画面外、余白、メニュー、関係ない場所。逃げているようで、実は心を整える時間を作っています。ちゃんと戻ってくるのでセーフです。",
+reason: "結果欄外タップ、読み込み中の別操作、結果確認前の逃避行動が多いと出やすいタイプです。"
+}
 };
 
 const $ = selector => document.querySelector(selector);
@@ -155,11 +210,11 @@ function runResult() {
   resolving = true; resolveStartedAt = performance.now(); lastInputAt = resolveStartedAt; currentLog.hesitationMs = Math.round(resolveStartedAt - stageStartedAt);
   const stage = stages[current];
   setStageState(stage.id === "exam" ? "loading" : "resolving");
-  if (stage.id === "slot") el.whisper.textContent = "レバーは落ちた。あとは、光るかどうか。";
-  if (stage.id === "ball") el.whisper.textContent = "AもBも、いまだけは押していい。";
-  if (stage.id === "gacha") el.whisper.textContent = "扉の向こうが、まだ見えない。";
-  if (stage.id === "mail") el.whisper.textContent = "紙一枚ぶんの時間が、長い。";
-  if (stage.id === "exam") el.whisper.textContent = "通信環境のせいにできるのは、いまだけ。";
+  if (stage.id === "slot") el.whisper.textContent = "...";
+  if (stage.id === "ball") el.whisper.textContent = "...";
+  if (stage.id === "gacha") el.whisper.textContent = "...";
+  if (stage.id === "mail") el.whisper.textContent = "...";
+  if (stage.id === "exam") el.whisper.textContent = "...";
   const delay = stage.id === "ball" ? 3200 : stage.id === "slot" ? 2700 : stage.id === "exam" ? 2200 : 2400;
   later(revealResult, delay);
 }
@@ -211,12 +266,12 @@ function logSummary(log) {
 }
 function getFortune(hitCount) {
   return [
-    { rank: "逆神の日", comment: "今日は何かを引くより、静かに寝た方がいい日。" },
-    { rank: "低空飛行", comment: "運は渋め。でも、ひとつ拾えただけまだ人間。" },
+    { rank: "逆神の日", comment: "今日は何かをするより、静かに寝た方がいい日です。" },
+    { rank: "低空飛行", comment: "運は渋め。でも、ひとつ拾えただけまだマシ。" },
     { rank: "普通の日", comment: "良くも悪くも現実的。期待しすぎなければ悪くない。" },
-    { rank: "なかなか持ってる", comment: "5回中3回当たり。今日はまだ信じていい日かもしれません。" },
-    { rank: "かなり強い", comment: "ここぞという場面で引けている。ちょっと調子に乗っていい。" },
-    { rank: "豪運", comment: "全部当たり。今日のあなたは、儀式が効いたことにしていい。" }
+    { rank: "なかなか持ってる", comment: "5回中3回当たり。今日は自分信じていい日かもしれません。" },
+    { rank: "かなり強い", comment: "ここぞという場面で引けている。ちょっと調子に乗っていい日。" },
+    { rank: "豪運", comment: "全部当たり。今日のあなたは、全ての祈りが届くでしょう。" }
   ][hitCount];
 }
 function showResult() {

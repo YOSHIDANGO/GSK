@@ -4,6 +4,7 @@ html { background:#08050b; }
 body { margin:0; min-height:100svh; color:var(--ink); font-family:system-ui,-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif; background:radial-gradient(circle at 50% 0,#32143a 0,#100914 48%,#060408 100%); }
 button { font:inherit; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
 button:focus,button:focus-visible,button:active,[data-action]:focus,[data-action]:focus-visible,[data-action]:active { outline:none; -webkit-tap-highlight-color:transparent; }
+.primary-btn:focus-visible,.ghost-btn:focus-visible,.next-btn:focus-visible { outline:2px solid #fff0b2; outline-offset:3px; }
 .hidden { display:none!important; }
 .app { min-height:100svh; }
 .intro-screen,.result-screen { width:100%; min-height:100svh; display:grid; place-items:center; padding:24px 14px; overflow:hidden; }
@@ -17,7 +18,7 @@ button:focus,button:focus-visible,button:active,[data-action]:focus,[data-action
 .ghost-btn { color:var(--ink); background:#ffffff12; border:1px solid var(--line); }
 
 /* プレイ中は共通カードを使わず、縦長の疑似端末だけを前面に出す */
-.game-screen { width:100%; min-height:100svh; padding:0 0 calc(18px + env(safe-area-inset-bottom)); overflow:hidden; }
+.game-screen { width:100%; min-height:100svh; padding:0 0 calc(18px + env(safe-area-inset-bottom)); overflow-x:hidden; overflow-y:auto; }
 .stage-hud { position:relative; z-index:20; width:min(520px,100%); min-height:74px; margin:auto; padding:12px 16px 10px; display:flex; align-items:center; justify-content:space-between; gap:14px; background:linear-gradient(#100b17f5,#100b17d9); border-bottom:1px solid var(--line); }
 .stage-hud div { display:grid; gap:2px; }
 .stage-hud span { color:var(--gold); font-size:.72rem; font-weight:900; letter-spacing:.12em; }
@@ -191,12 +192,11 @@ button:focus,button:focus-visible,button:active,[data-action]:focus,[data-action
 }
 .intro-logo-sheet,.result-brand-logo {
   display:block;
-  background:#f3f2f2;
-  clip-path:polygon(1.5% 4%,98.5% 1%,99% 93%,96% 98%,3% 96%,0 87%);
-  box-shadow:0 13px 35px #0009;
+  background:transparent;
+  box-shadow:none;
 }
-.intro-logo-sheet { width:min(100%,580px); margin:4px auto 0; padding:0; transform:rotate(-.45deg); }
-.intro-logo-sheet .title-logo { width:100%; margin:0; mix-blend-mode:multiply; }
+.intro-logo-sheet { width:88%; max-width:520px; margin:4px auto 0; padding:0 5px; transform:rotate(-.45deg); }
+.intro-logo-sheet .title-logo { width:100%; max-width:100%; height:auto; margin:0; mix-blend-mode:normal; filter:drop-shadow(0 14px 24px #000b); }
 .intro-subcopy {
   position:relative;
   width:max-content;
@@ -231,16 +231,20 @@ button:focus,button:focus-visible,button:active,[data-action]:focus,[data-action
 .archive-screen { align-items:start; padding-top:14px; }
 .ritual-report { padding:clamp(24px,5vw,44px) clamp(17px,5vw,40px) 38px; }
 .result-brand { position:relative; display:flex; justify-content:center; align-items:flex-end; min-height:92px; margin:0 auto 6px; }
-.result-brand-logo { width:min(245px,72%); mix-blend-mode:normal; filter:brightness(1.06) contrast(1.03); opacity:1; transform:rotate(-.7deg); }
+.result-brand-logo { width:min(245px,72%); mix-blend-mode:normal; filter:brightness(1.16) contrast(1.06) drop-shadow(0 9px 16px #000c); opacity:1; transform:rotate(-.7deg); }
 .result-seal-icon { width:68px; aspect-ratio:1; margin:0 0 -5px -20px; object-fit:cover; border:2px solid #d3a952; border-radius:18px; box-shadow:0 0 25px rgba(205,39,96,.4); transform:rotate(5deg); }
 .report-kicker { width:max-content; max-width:100%; margin:10px auto 18px; padding:5px 12px; border:1px solid rgba(202,48,100,.42); background:#160910; text-align:center; }
 .ritual-report .result-heading { padding:14px; border:1px solid rgba(210,164,78,.3); border-radius:5px; background:linear-gradient(120deg,rgba(79,15,46,.28),rgba(0,0,0,.28)); box-shadow:inset 0 0 24px #0007; }
 .ritual-report .result-label { color:#e08aaa; letter-spacing:.13em; }
 .ritual-report .result-heading h1 { color:#fff0d5; text-shadow:0 0 16px rgba(224,46,109,.25); }
+.result-title { margin:6px 0 0; color:#e7bd6b; font-family:serif; font-size:clamp(.78rem,3vw,.95rem); letter-spacing:.08em; line-height:1.45; }
 .ritual-report .result-icon { filter:drop-shadow(0 0 14px rgba(202,45,104,.35)); }
 .ritual-report .result-summary { padding:3px 4px; color:#dcd0db; }
 .ritual-report .behavior { border-left-color:#c62d65; background:linear-gradient(90deg,rgba(124,22,63,.23),transparent); }
 .ritual-report .behavior strong { color:#e7bd6b; font-family:serif; letter-spacing:.08em; }
+.result-reason { margin:14px 0 0; padding:12px 14px; border:1px dashed rgba(211,71,119,.42); background:rgba(8,4,9,.36); }
+.result-reason h2 { margin:0 0 6px; color:#ef92b4; font-size:.78rem; letter-spacing:.08em; }
+.result-reason p { margin:0; color:#cfc2cc; font-size:.82rem; line-height:1.65; }
 .ritual-report .score-grid div { position:relative; overflow:hidden; border-color:rgba(170,78,113,.33); border-radius:5px; background:linear-gradient(145deg,rgba(69,17,48,.32),rgba(0,0,0,.35)); }
 .ritual-report .score-grid div::after { content:"×"; position:absolute; right:7px; top:3px; color:rgba(215,47,103,.18); font-size:1.4rem; transform:rotate(12deg); }
 .ritual-report .score-grid strong { color:#f0cd7c; font-family:Georgia,serif; }

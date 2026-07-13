@@ -1,31 +1,31 @@
 const stages = [
   {
     id: "slot", title: "ステージ1：兆しのランプ", count: "1 / 5", prompt: "光るかどうかは、まだ見ない。", startLabel: "台に座る",
-    intro: ["これは、ランプが光れば大当たりのスロットゲームです。", "レバーを叩く前に、ランプをなでる、ボタンを押す、少し間を置く。", "意味があるかはわかりません。でも、光ってほしいなら、今できることをしてからレバーオンしてください。"],
+    intro: ["ランプが光れば大当たり。レバーを叩けば、あとは待つだけ。", "なでるか、連打するか、一拍置くか。光ってほしいとき、指は勝手に動きます。"],
     images: { idle: "stage1_slot_base.png", resolving: "stage1_slot_spinning.png", win: "stage1_slot_win.png", lose: "stage1_slot_base.png" },
     winText: "BONUS確定", loseText: "……ランプは光らない。"
   },
   {
     id: "ball", title: "ステージ2：最後の封印", count: "2 / 5", prompt: "残るカプセルボールは、これひとつ。", startLabel: "ボールを構える",
-    intro: ["目の前に、伝説級のモンスターが現れました。", "手元に残っているのは、カプセルボールがひとつだけ。投げたあとは、揺れるボールを見守るしかありません。", "Aを押すのか、Bを押しっぱなしにするのか、下を押すのか。自分だけのやり方で、なんとかゲットしてください。"],
+    intro: ["目の前には伝説級の気配。残るカプセルボールは、ひとつ。", "投げたあとは見守るだけ。Aか、B長押しか、十字キー下か。"],
     images: { idle: "stage2_battle_base.png", resolving: "stage2_battle_capturing.png", win: "stage2_battle_success.png", lose: "stage2_battle_fail.png" },
-    winText: "モンスターGETだぜ！", loseText: "……惜しい。逃げられた。"
+    winText: "捕獲成功！", loseText: "……惜しい。逃げられた。"
   },
   {
     id: "gacha", title: "ステージ3：最後の一回", count: "3 / 5", prompt: "石はひとつ。押せるのも一度だけ。", startLabel: "召喚画面へ",
-    intro: ["レアキャラを引くために、これまで無課金で貯めてきた石。", "その石も、あと1回分だけになってしまいました。ここで引けなければ、次はいつになるかわかりません。", "画面をなでるか、長押しするか、少し待つか。押す瞬間は、あなたに任されています。"],
+    intro: ["貯めてきた石は、あと一回分。次がいつかは分かりません。", "なでる、長押し、一拍待つ。押す瞬間だけは、自分で選べます。"],
     images: { idle: "stage3_gacha_top.png", resolving: "stage3_gacha_drawing.png", win: "stage3_gacha_win.png", lose: "stage3_gacha_lose.png" },
-    winText: "神引き！！", loseText: "またゴミだ"
+    winText: "特別な気配を引き当てた。", loseText: "いつもの気配だった。"
   },
   {
     id: "mail", title: "ステージ4：当落のお知らせ", count: "4 / 5", prompt: "開けなければ、まだ落ちていない。", startLabel: "通知を確認する",
-    intro: ["抽選結果のお知らせが届きました。", "開ければ、当選か落選かが確定します。でも、開けなければ、まだ落ちていません。", "封筒をなでるのか、少し待つのか、勢いで開けるのか。心の準備ができたら、通知を開いてください。"],
+    intro: ["抽選結果のお知らせが届きました。開ければ、当落が確定します。", "でも、開けなければまだ落ちていない。心の準備は、封筒を前に整えます。"],
     images: { idle: "stage4_lottery_base.png", resolving: "stage4_lottery_opening.png", win: "stage4_lottery_win.png", lose: "stage4_lottery_lose.png" },
     winText: "当選のお知らせ", loseText: "今回はご用意できませんでした"
   },
   {
     id: "exam", title: "ステージ5：結果照会", count: "5 / 5", prompt: "見るまでは、まだどちらでもない。", startLabel: "結果ページへ",
-    intro: ["合否発表ページが開かれています。", "受験番号は入力済み。あとは、結果表示ボタンを押すだけです。見るまでは、まだどちらでもありません。", "すぐ押すのか、少し待つのか、画面を隠しながら見るのか。覚悟ができたら、結果を照会してください。"],
+    intro: ["受験番号は入力済み。あとは、結果表示ボタンを押すだけ。", "見るまでは、まだどちらでもありません。覚悟の決め方は人それぞれです。"],
     images: { idle: "stage5_exam_base.png", resolving: "stage5_exam_base.png", win: "stage5_exam_base.png", lose: "stage5_exam_base.png" },
     winText: "合格", loseText: "不合格"
   }
@@ -100,7 +100,8 @@ const $ = selector => document.querySelector(selector);
 const el = {
   intro: $("#intro"), game: $("#game"), result: $("#result"), startBtn: $("#startBtn"), mount: $("#experienceMount"),
   stageCount: $("#stageCount"), stageTitle: $("#stageTitle"), stagePrompt: $("#stagePrompt"), whisper: $("#stageWhisper"), nextBtn: $("#nextBtn"),
-  resultIcon: $("#resultIcon"), resultType: $("#resultType"), resultSummary: $("#resultSummary"), resultBehavior: $("#resultBehavior"),
+  resultIcon: $("#resultIcon"), resultType: $("#resultType"), resultTitle: $("#resultTitle"), resultSummary: $("#resultSummary"),
+  resultBehavior: $("#resultBehavior"), resultReason: $("#resultReason"),
   scoreFaith: $("#scoreFaith"), scoreHesitation: $("#scoreHesitation"), scoreAvoidance: $("#scoreAvoidance"), scoreHuman: $("#scoreHuman"),
   fortuneHits: $("#fortuneHits"), fortuneRank: $("#fortuneRank"), fortuneComment: $("#fortuneComment"),
   finalLog: $("#finalLog"), shareBtn: $("#shareBtn"), restartBtn: $("#restartBtn"), copyStatus: $("#copyStatus")
@@ -113,7 +114,12 @@ let pointerStart = null, gestureStroked = false, holdStart = 0, suppressClick = 
 const asset = name => `./assets/${name}`;
 const later = (fn, ms) => { const id = setTimeout(fn, ms); timers.push(id); return id; };
 function clearTimers() { timers.forEach(clearTimeout); timers = []; }
-function showScreen(name) { el.intro.classList.toggle("hidden", name !== "intro"); el.game.classList.toggle("hidden", name !== "game"); el.result.classList.toggle("hidden", name !== "result"); }
+function showScreen(name) {
+  el.intro.classList.toggle("hidden", name !== "intro");
+  el.game.classList.toggle("hidden", name !== "game");
+  el.result.classList.toggle("hidden", name !== "result");
+  window.scrollTo(0, 0);
+}
 function freshLog(stage) {
   return {
     stageId: stage.id, stageTitle: stage.title, taps: 0, strokes: 0, longPressMs: 0, hesitationMs: 0, waitNoInputMs: 0, outsideTaps: 0,
@@ -274,9 +280,23 @@ function getFortune(hitCount) {
     { rank: "豪運", comment: "全部当たり。今日のあなたは、全ての祈りが届くでしょう。" }
   ][hitCount];
 }
+function buildDiagnosticReason(typeKey, totals) {
+  const seconds = milliseconds => (milliseconds / 1000).toFixed(1);
+  const evidence = {
+    resonance: `ランプ接触${totals.lampTouches}回、捕獲中の画面タップ${totals.screenTapsDuringCapture}回、十字キー下入力${totals.dpadDownTaps}回を記録しました。`,
+    mash: `Aボタン${totals.aButtonTaps}回、停止ボタン${totals.stopButtonTaps}回、全体タップ${totals.taps}回を記録しました。`,
+    hide: `隠す行動${totals.hides}回、結果欄外タップ${totals.outsideTaps}回、少しずつ見る操作${totals.examPeeks}回を記録しました。`,
+    stroke: `なで操作${totals.strokes}回、ランプ接触${totals.lampTouches}回、封筒接触${totals.envelopeTouches}回を記録しました。`,
+    timing: `結果を押すまでの累計は${seconds(totals.hesitationMs)}秒、ボタン長押しは${seconds(totals.gachaButtonHolds + totals.bButtonHolds)}秒でした。`,
+    stare: `結果待ち中、操作せず見守った時間は合計${seconds(totals.waitNoInputMs)}秒でした。`,
+    escape: `結果欄外タップ${totals.outsideTaps}回、少しずつ見る操作${totals.examPeeks}回を記録しました。`
+  };
+  return `${evidence[typeKey]} ${typeDefs[typeKey].reason}`;
+}
 function showResult() {
   const analysis = analyzeLogs(stageLogs), type = typeDefs[analysis.typeKey]; showScreen("result");
-  el.resultIcon.src = asset(type.icon); el.resultIcon.alt = type.name; el.resultType.textContent = type.name; el.resultSummary.textContent = type.summary; el.resultBehavior.textContent = type.behavior;
+  el.resultIcon.src = asset(type.icon); el.resultIcon.alt = type.name; el.resultType.textContent = type.name; el.resultTitle.textContent = type.title;
+  el.resultSummary.textContent = type.summary; el.resultBehavior.textContent = type.behavior; el.resultReason.textContent = buildDiagnosticReason(analysis.typeKey, analysis.totals);
   el.scoreFaith.textContent = analysis.faith; el.scoreHesitation.textContent = analysis.hesitation; el.scoreAvoidance.textContent = analysis.avoidance; el.scoreHuman.textContent = analysis.human;
   const fortune = getFortune(analysis.totals.success);
   el.fortuneHits.textContent = `${analysis.totals.success} / 5`;
@@ -284,7 +304,7 @@ function showResult() {
   el.fortuneComment.textContent = fortune.comment;
   el.finalLog.innerHTML = stageLogs.map(log => `<article><header><strong>${log.stageTitle}</strong><span>${log.result}</span></header><p>${logSummary(log)}</p><small>ためらい ${(log.hesitationMs / 1000).toFixed(1)}秒 / 結果待ちの無操作 ${(log.waitNoInputMs / 1000).toFixed(1)}秒</small></article>`).join("");
 }
-function buildShareText() { return ["MY儀式 診断結果", `タイプ：${el.resultType.textContent}`, `今日の運勢：${el.fortuneRank.textContent}`, `当たり数：${el.fortuneHits.textContent}`, `信仰心：${el.scoreFaith.textContent}`, `ためらい：${el.scoreHesitation.textContent}`, `現実逃避：${el.scoreAvoidance.textContent}`, `人間味：${el.scoreHuman.textContent}`, "", "見るまで確定じゃない。", "#MY儀式"].join("\n"); }
+function buildShareText() { return ["MY儀式 診断結果", `タイプ：${el.resultType.textContent}`, `称号：${el.resultTitle.textContent}`, `今日の運勢：${el.fortuneRank.textContent}`, `当たり数：${el.fortuneHits.textContent}`, `信仰心：${el.scoreFaith.textContent}`, `ためらい：${el.scoreHesitation.textContent}`, `現実逃避：${el.scoreAvoidance.textContent}`, `人間味：${el.scoreHuman.textContent}`, "", "見るまで確定じゃない。", "#MY儀式"].join("\n"); }
 async function shareResult() {
   const text = buildShareText();
   const shareData = { title: "MY儀式", text, url: location.href };

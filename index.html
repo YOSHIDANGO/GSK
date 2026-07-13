@@ -8,8 +8,15 @@
   <meta property="og:title" content="MY儀式｜見るまで確定じゃない">
   <meta property="og:description" content="連打する。なでる。隠す。見ないふりをする。あなたのMY儀式を診断します。">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="./assets/ogp.png">
+  <meta property="og:url" content="https://mygishiki.vercel.app/">
+  <meta property="og:image" content="https://mygishiki.vercel.app/assets/ogp.png">
+  <meta property="og:image:alt" content="MY儀式｜見るまで確定じゃない">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MY儀式｜見るまで確定じゃない">
+  <meta name="twitter:description" content="結果直前の変な祈り行動を記録するミニ診断。">
+  <meta name="twitter:image" content="https://mygishiki.vercel.app/assets/ogp.png">
   <meta name="theme-color" content="#140712">
+  <link rel="canonical" href="https://mygishiki.vercel.app/">
   <link rel="icon" type="image/png" sizes="1254x1254" href="./assets/ui/app_icon_mygishiki.png">
   <link rel="apple-touch-icon" href="./assets/ui/app_icon_mygishiki.png">
   <link rel="manifest" href="./manifest.webmanifest">
@@ -47,7 +54,7 @@
       </div>
     </section>
 
-    <section id="result" class="result-screen archive-screen hidden">
+    <section id="result" class="result-screen archive-screen hidden" aria-live="polite">
       <div class="result-card ritual-report">
         <header class="result-brand">
           <img class="result-brand-logo" src="./assets/ui/logo_mygishiki.png" alt="MY儀式">
@@ -56,10 +63,14 @@
         <p class="eyebrow report-kicker">封印解除済み・黒歴史儀式診断書</p>
         <div class="result-heading">
           <img id="resultIcon" class="result-icon" alt="">
-          <div><span class="result-label">MY儀式タイプ</span><h1 id="resultType"></h1></div>
+          <div><span class="result-label">MY儀式タイプ</span><h1 id="resultType"></h1><p id="resultTitle" class="result-title"></p></div>
         </div>
         <p id="resultSummary" class="result-summary"></p>
         <p class="behavior"><strong>主な祈り行動</strong><span id="resultBehavior"></span></p>
+        <section class="result-reason" aria-labelledby="reasonTitle">
+          <h2 id="reasonTitle">このタイプになった理由</h2>
+          <p id="resultReason"></p>
+        </section>
         <div class="score-grid">
           <div><span>信仰心</span><strong id="scoreFaith">0</strong></div>
           <div><span>ためらい</span><strong id="scoreHesitation">0</strong></div>

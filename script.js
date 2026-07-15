@@ -1,344 +1,388 @@
 const stages = [
-  {
-    id: "slot", title: "ステージ1：兆しのランプ", count: "1 / 5", prompt: "光るかどうかは、まだ見ない。", startLabel: "台に座る",
-    intro: ["ランプが光れば大当たり。レバーを叩けば、あとは待つだけ。", "なでるか、連打するか、一拍置くか。光ってほしいとき、指は勝手に動きます。"],
-    images: { idle: "stage1_slot_base.png", resolving: "stage1_slot_spinning.png", win: "stage1_slot_win.png", lose: "stage1_slot_base.png" },
-    winText: "BONUS確定", loseText: "……ランプは光らない。"
-  },
-  {
-    id: "ball", title: "ステージ2：最後の封印", count: "2 / 5", prompt: "残るカプセルボールは、これひとつ。", startLabel: "ボールを構える",
-    intro: ["目の前には伝説級の気配。残るカプセルボールは、ひとつ。", "投げたあとは見守るだけ。Aか、B長押しか、十字キー下か。"],
-    images: { idle: "stage2_battle_base.png", resolving: "stage2_battle_capturing.png", win: "stage2_battle_success.png", lose: "stage2_battle_fail.png" },
-    winText: "捕獲成功！", loseText: "……惜しい。逃げられた。"
-  },
-  {
-    id: "gacha", title: "ステージ3：最後の一回", count: "3 / 5", prompt: "石はひとつ。押せるのも一度だけ。", startLabel: "召喚画面へ",
-    intro: ["貯めてきた石は、あと一回分。次がいつかは分かりません。", "なでる、長押し、一拍待つ。押す瞬間だけは、自分で選べます。"],
-    images: { idle: "stage3_gacha_top.png", resolving: "stage3_gacha_drawing.png", win: "stage3_gacha_win.png", lose: "stage3_gacha_lose.png" },
-    winText: "特別な気配を引き当てた。", loseText: "いつもの気配だった。"
-  },
-  {
-    id: "mail", title: "ステージ4：当落のお知らせ", count: "4 / 5", prompt: "開けなければ、まだ落ちていない。", startLabel: "通知を確認する",
-    intro: ["抽選結果のお知らせが届きました。開ければ、当落が確定します。", "でも、開けなければまだ落ちていない。心の準備は、封筒を前に整えます。"],
-    images: { idle: "stage4_lottery_base.png", resolving: "stage4_lottery_opening.png", win: "stage4_lottery_win.png", lose: "stage4_lottery_lose.png" },
-    winText: "当選のお知らせ", loseText: "今回はご用意できませんでした"
-  },
-  {
-    id: "exam", title: "ステージ5：結果照会", count: "5 / 5", prompt: "見るまでは、まだどちらでもない。", startLabel: "結果ページへ",
-    intro: ["受験番号は入力済み。あとは、結果表示ボタンを押すだけ。", "見るまでは、まだどちらでもありません。覚悟の決め方は人それぞれです。"],
-    images: { idle: "stage5_exam_base.png", resolving: "stage5_exam_base.png", win: "stage5_exam_base.png", lose: "stage5_exam_base.png" },
-    winText: "合格", loseText: "不合格"
-  }
+  { id:"slot", title:"兆しのランプ", prompt:"光れば大当たり。レバーは、まだ引かなくていい。", image:"stage1_slot_base.png", images:{ idle:"stage1_slot_base.png", ritual:"stage1_slot_base.png", resolving:"stage1_slot_spinning.png", concealed:"stage1_slot_base.png", win:"stage1_slot_win.png", lose:"stage1_slot_base.png" } },
+  { id:"ball", title:"最後の封印", prompt:"最後のカプセル。押したくなったボタンは、好きに押していい。", image:"stage2_battle_base.png", images:{ idle:"stage2_battle_base.png", ritual:"stage2_battle_base.png", resolving:"stage2_battle_capturing.png", concealed:"stage2_battle_capturing.png", win:"stage2_battle_success.png", lose:"stage2_battle_fail.png" } },
+  { id:"gacha", title:"最後の一回", prompt:"残り一回。押すタイミングだけは、自分で決められる。", image:"stage3_gacha_top.png", images:{ idle:"stage3_gacha_top.png", ritual:"stage3_gacha_top.png", resolving:"stage3_gacha_drawing.png", concealed:"stage3_gacha_drawing.png", win:"stage3_gacha_win.png", lose:"stage3_gacha_lose.png" } },
+  { id:"mail", title:"当落のお知らせ", prompt:"開けば分かる。開かなければ、まだ落ちていない。", image:"stage4_lottery_base.png", images:{ idle:"stage4_lottery_base.png", ritual:"stage4_lottery_base.png", resolving:"stage4_lottery_opening.png", concealed:"stage4_lottery_opening.png", win:"stage4_lottery_win.png", lose:"stage4_lottery_lose.png" } },
+  { id:"exam", title:"結果照会", prompt:"受験番号は入力済み。あとは、見るだけ。", image:"stage5_exam_base.png", images:{ idle:"stage5_exam_base.png", ritual:"stage5_exam_base.png", resolving:"stage5_exam_base.png", concealed:"stage5_exam_base.png", win:"stage5_exam_base.png", lose:"stage5_exam_base.png" } }
 ];
 
 const typeDefs = {
-resonance: {
-name: "本体シンクロ型",
-title: "筐体と心拍を合わせし者",
-icon: "type_resonance.png",
-behavior: "光る場所、揺れる画面、動く演出に合わせて指を動かす",
-summary: "あなたは、画面や本体の動きに自分の気持ちを合わせるタイプです。ランプが光りそうな瞬間、ボールが揺れる瞬間、演出が強くなる瞬間に、なぜか指先も一緒に動きます。運命に直接触れている気がするタイプです。",
-reason: "ランプや画面への接触、演出中のタップが多いと出やすいタイプです。"
-},
-
-mash: {
-name: "連打祈祷型",
-title: "Aボタンに魂を込めし者",
-icon: "type_mash.png",
-behavior: "Aボタン、停止ボタン、決定ボタンをとにかく押す",
-summary: "あなたは、何もしない時間に耐えられないタイプです。結果が出るまでの数秒、指だけは止まりません。効くかどうかは分からない。でも押している間だけは、まだ自分が運命に参加できている気がします。",
-reason: "Aボタン連打、停止ボタン連打、画面タップが多いと出やすいタイプです。"
-},
-
-hide: {
-name: "見ないふり型",
-title: "結果を封印せし者",
-icon: "type_hide.png",
-behavior: "結果を隠す、視線を外す、少しずつ見る",
-summary: "あなたは、結果を一気に受け止めるのが苦手なタイプです。見なければ、まだ悪い結果は確定していません。指や視線で少しだけ逃げ道を作りながら、最後はちゃんと確認します。",
-reason: "隠す操作、結果欄外タップ、少しずつ見る行動が多いと出やすいタイプです。"
-},
-
-stroke: {
-name: "なで祈願型",
-title: "対象と和解せし者",
-icon: "type_stroke.png",
-behavior: "ランプ、封筒、画面を丁寧になでる",
-summary: "あなたは、強く押すより優しくお願いするタイプです。ランプにも、封筒にも、ガチャ画面にも、まずは礼儀があります。結果に直接効く根拠はありませんが、雑に扱うよりは良い気がしています。",
-reason: "なで操作、ランプ接触、封筒接触が多いと出やすいタイプです。"
-},
-
-timing: {
-name: "間合い読み型",
-title: "押す瞬間を選びし者",
-icon: "type_timing.png",
-behavior: "ボタンを押す前に、少し待つ",
-summary: "あなたは、すぐ押せるボタンを前にしても、あえて一拍置くタイプです。早すぎても違う。遅すぎても違う。運命の結果が決まっていたとしても、押すタイミングだけは自分で選びたい人です。",
-reason: "レバーオン、召喚、開封、結果表示の前にためらい時間が長いと出やすいタイプです。"
-},
-
-stare: {
-name: "凝視念力型",
-title: "無言で圧をかけし者",
-icon: "type_stare.png",
-behavior: "余計な操作をせず、画面を見つめる",
-summary: "あなたは、動かずに祈るタイプです。外から見ると何もしていないように見えますが、内側ではかなり強めに念を送っています。連打もしない、隠しもしない。ただ見届ける。それも立派な儀式です。",
-reason: "操作が少なく、結果待ち中の無操作時間が長いと出やすいタイプです。"
-},
-
-escape: {
-name: "読み込み逃避型",
-title: "結果直前に別の場所を触りし者",
-icon: "type_escape.png",
-behavior: "結果欄の外を触る、違う場所を見て時間を稼ぐ",
-summary: "あなたは、結果が出る直前になると急に別の場所が気になるタイプです。画面外、余白、メニュー、関係ない場所。逃げているようで、実は心を整える時間を作っています。ちゃんと戻ってくるのでセーフです。",
-reason: "結果欄外タップ、読み込み中の別操作、結果確認前の逃避行動が多いと出やすいタイプです。"
-}
+  resonance:{ name:"本体シンクロ型", title:"筐体と心拍を合わせし者", icon:"type_resonance.png", behavior:"動く画面へ指を合わせる", summary:"光る場所や揺れる画面に、自分の指先まで同期してしまうタイプです。" },
+  mash:{ name:"連打祈祷型", title:"回数で運命を殴る者", icon:"type_mash.png", behavior:"意味のない連打", summary:"押せるものは押せるだけ押す。回数には意味があると、指だけが信じています。" },
+  hide:{ name:"隠蔽確認型", title:"見えなければ未確定の者", icon:"type_hide.png", behavior:"結果を見ないための行動", summary:"結果を知りたいのに、最後の一瞬だけは隠しておきたいタイプです。" },
+  stroke:{ name:"なで信仰型", title:"対象を過剰に愛撫する者", icon:"type_stroke.png", behavior:"対象への過剰な愛撫", summary:"なでれば何かが伝わる気がする。対象との対話を指先へ託すタイプです。" },
+  timing:{ name:"間合い調整型", title:"押せるのに押さない者", icon:"type_timing.png", behavior:"押せるのに押さない時間", summary:"押す瞬間にだけは意味があると信じ、最良の一拍を探し続けるタイプです。" },
+  stare:{ name:"無言凝視型", title:"視線だけで運命を圧す者", icon:"type_stare.png", behavior:"結果待ちの無言凝視", summary:"余計なことはせず、ただ見守る。その沈黙も立派な儀式です。" },
+  escape:{ name:"現実回避型", title:"余白へ逃げる者", icon:"type_escape.png", behavior:"関係ない場所への退避", summary:"本当に見るべき場所ほど触れず、画面の余白へ気持ちを逃がすタイプです。" }
 };
 
-const $ = selector => document.querySelector(selector);
-const el = {
-  intro: $("#intro"), game: $("#game"), result: $("#result"), startBtn: $("#startBtn"), mount: $("#experienceMount"),
-  stageCount: $("#stageCount"), stageTitle: $("#stageTitle"), stagePrompt: $("#stagePrompt"), whisper: $("#stageWhisper"), nextBtn: $("#nextBtn"),
-  resultIcon: $("#resultIcon"), resultType: $("#resultType"), resultTitle: $("#resultTitle"), resultSummary: $("#resultSummary"),
-  resultBehavior: $("#resultBehavior"), resultReason: $("#resultReason"),
-  scoreFaith: $("#scoreFaith"), scoreHesitation: $("#scoreHesitation"), scoreAvoidance: $("#scoreAvoidance"), scoreHuman: $("#scoreHuman"),
-  fortuneHits: $("#fortuneHits"), fortuneRank: $("#fortuneRank"), fortuneComment: $("#fortuneComment"),
-  finalLog: $("#finalLog"), shareBtn: $("#shareBtn"), restartBtn: $("#restartBtn"), copyStatus: $("#copyStatus")
+const resultPatterns = [
+  [false,true,false,true,true], [true,false,true,false,false], [false,false,true,true,true],
+  [true,true,false,false,true], [true,false,false,true,false], [false,true,true,false,false]
+];
+const params = new URLSearchParams(location.search);
+const debug = {
+  enabled: params.get("debug") === "1",
+  result: ["win","lose"].includes(params.get("result")) ? params.get("result") : "",
+  stage: ({capture:"ball",lottery:"mail"})[params.get("stage")] || params.get("stage") || "",
+  echo: params.get("echo") || ""
 };
 
-let current = 0, stageStartedAt = 0, resolveStartedAt = 0, lastInputAt = 0;
-let stageState = "intro", resolving = false, resolved = false, currentLog = null, stageLogs = [], timers = [];
-let pointerStart = null, gestureStroked = false, holdStart = 0, suppressClick = false;
+const el = Object.fromEntries([
+  "intro","setup","game","result","startBtn","setupStartBtn","favoriteChoices","stageCount","stageTitle","stagePrompt",
+  "experienceMount","stageWhisper","nextBtn","soundToggle","debugPanel","replayText","strongestRitual","strongestEvidence","heatmapGrid",
+  "resultIcon","resultType","resultTitle","resultSummary","resultBehavior","resultReason","favoriteResultTitle","favoriteResultOutcome",
+  "favoriteResultComment","scoreFaith","scoreHesitation","scoreAvoidance","scoreHuman","fortuneHits","fortuneRank","fortuneComment",
+  "finalLog","shareCardType","shareCardTitle","shareCardRitual","shareCardFavorite","shareCardFortune","shareBtn","restartBtn","copyStatus"
+].map(id => [id, document.getElementById(id)]));
 
 const asset = name => `./assets/${name}`;
-const later = (fn, ms) => { const id = setTimeout(fn, ms); timers.push(id); return id; };
-function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+let favoriteId = "";
+let playOrder = [];
+let playIndex = 0;
+let stageLogs = [];
+let state = null;
+let timers = new Set();
+let audioContext = null;
+let soundEnabled = readSoundPreference();
+let sessionResults = {};
+let activeEcho = "";
+
+function readSoundPreference() {
+  try { return localStorage.getItem("mygishiki-sound") !== "off"; } catch { return true; }
+}
+function saveSoundPreference() {
+  try { localStorage.setItem("mygishiki-sound", soundEnabled ? "on" : "off"); } catch { /* storage is optional */ }
+}
+function later(fn, ms) {
+  const id = setTimeout(() => { timers.delete(id); fn(); }, ms);
+  timers.add(id); return id;
+}
+function clearTimers() { timers.forEach(clearTimeout); timers.clear(); }
 function showScreen(name) {
-  el.intro.classList.toggle("hidden", name !== "intro");
-  el.game.classList.toggle("hidden", name !== "game");
-  el.result.classList.toggle("hidden", name !== "result");
+  ["intro","setup","game","result"].forEach(id => el[id].classList.toggle("hidden", id !== name));
   window.scrollTo(0, 0);
 }
+function ensureAudio() {
+  if (!soundEnabled) return null;
+  const AudioCtor = window.AudioContext || window.webkitAudioContext;
+  if (!AudioCtor) return null;
+  audioContext ||= new AudioCtor();
+  if (audioContext.state === "suspended") audioContext.resume().catch(() => {});
+  return audioContext;
+}
+function tone(frequency, duration=.08, type="sine", volume=.035, delay=0) {
+  const ctx = ensureAudio(); if (!ctx) return;
+  const oscillator = ctx.createOscillator(), gain = ctx.createGain(), start = ctx.currentTime + delay;
+  oscillator.type = type; oscillator.frequency.setValueAtTime(frequency, start);
+  gain.gain.setValueAtTime(.0001, start); gain.gain.exponentialRampToValueAtTime(volume, start+.012); gain.gain.exponentialRampToValueAtTime(.0001, start+duration);
+  oscillator.connect(gain).connect(ctx.destination); oscillator.start(start); oscillator.stop(start+duration+.02);
+}
+function sound(name) {
+  if (!soundEnabled) return;
+  const sounds = {
+    pull:()=>{ tone(95,.18,"square",.045); tone(55,.22,"sine",.05,.03); },
+    stop:()=>tone(170 + (state?.log.stopButtonTaps || 0)*35,.08,"square",.035),
+    throw:()=>{ tone(230,.12,"sine",.035); tone(520,.15,"sine",.025,.08); },
+    shake:()=>tone(82,.11,"square",.025), success:()=>{ tone(523,.12); tone(784,.22,"sine",.04,.11); },
+    fail:()=>tone(92,.18,"sawtooth",.025), summon:()=>tone(72,.28,"sine",.055), door:()=>tone(140,.18,"sawtooth",.03),
+    card:()=>tone(660,.12,"triangle",.035), paper:()=>tone(260,.045,"triangle",.018), click:()=>tone(190,.06,"square",.02),
+    reveal:()=>tone(420,.09,"sine",.02)
+  };
+  sounds[name]?.();
+}
+function vibrate(pattern=12) { if (soundEnabled && navigator.vibrate) navigator.vibrate(pattern); }
+function updateSoundButton() { el.soundToggle.textContent = soundEnabled ? "音 ON" : "音 OFF"; el.soundToggle.setAttribute("aria-pressed", String(soundEnabled)); }
+
+function renderSetup() {
+  el.favoriteChoices.innerHTML = stages.map(stage => `<button type="button" data-favorite="${stage.id}"><span>${stage.title}</span><small>${stage.prompt.split("。")[0]}。</small></button>`).join("");
+  el.favoriteChoices.querySelectorAll("button").forEach(button => button.addEventListener("click", () => {
+    favoriteId = button.dataset.favorite;
+    el.favoriteChoices.querySelectorAll("button").forEach(item => item.classList.toggle("selected", item === button));
+    el.setupStartBtn.disabled = false; sound("click");
+  }));
+  const radio = document.querySelector(`input[name="sound"][value="${soundEnabled ? "on" : "off"}"]`); if (radio) radio.checked = true;
+}
+function beginSession() {
+  soundEnabled = document.querySelector('input[name="sound"]:checked')?.value !== "off"; saveSoundPreference(); ensureAudio(); updateSoundButton();
+  if (!favoriteId) return;
+  const normalOrder = stages.filter(stage => stage.id !== favoriteId);
+  playOrder = [...normalOrder, stages.find(stage => stage.id === favoriteId)];
+  if (debug.stage && stages.some(stage => stage.id === debug.stage)) playOrder = [stages.find(stage => stage.id === debug.stage)];
+  const pattern = resultPatterns[Math.floor(Math.random()*resultPatterns.length)];
+  sessionResults = Object.fromEntries(stages.map((stage,index) => [stage.id, debug.result ? debug.result === "win" : pattern[index]]));
+  stageLogs = []; playIndex = 0; showScreen("game"); loadStage();
+}
+
 function freshLog(stage) {
   return {
-    stageId: stage.id, stageTitle: stage.title, taps: 0, strokes: 0, longPressMs: 0, hesitationMs: 0, waitNoInputMs: 0, outsideTaps: 0,
-    lampTouches: 0, leverPulls: 0, stopButtonTaps: 0, aButtonTaps: 0, bButtonHolds: 0, dpadDownTaps: 0, screenTapsDuringCapture: 0,
-    gachaButtonHolds: 0, gachaHesitationMs: 0, envelopeTouches: 0, envelopeHolds: 0, envelopeHesitationMs: 0,
-    hides: 0, examHesitationMs: 0, examPeeks: 0, result: null
+    stageId:stage.id, stageTitle:stage.title, result:"", touchPoints:[], taps:0, outsideTaps:0, strokes:0, longPressMs:0, hesitationMs:0, waitNoInputMs:0,
+    lampTouches:0, lampDistance:0, leverPulls:0, leverPullDelayMs:0, stopButtonTaps:0, stopOrder:[], lampCoverMs:0, revealHesitationMs:0,
+    aButtonTaps:0, bButtonHolds:0, dpadDownTaps:0, screenTapsDuringCapture:0, throwSpeed:0, revealAction:"", postShakeRevealMs:0,
+    gachaHesitationMs:0, gachaButtonHolds:0, gachaStrokes:0, doorOpenMs:0, doorStops:0, cardRevealMs:0, cardTouches:0,
+    envelopeTouches:0, envelopeDistance:0, envelopeHesitationMs:0, envelopeHolds:0, flapOpenMs:0, paperSpeed:0, paperStops:0, textRevealMs:0, paperReturned:0,
+    examHesitationMs:0, examCurtainMoves:0, examPeeks:0, examCurtainReturns:0, examRevealMs:0, examRehideAttempts:0, hides:0
   };
 }
+function createState(stage) {
+  const now = performance.now();
+  return { status:"intro", isResolved:false, isRevealed:false, result:sessionResults[stage.id], startedAt:now, resolvedAt:0, revealedAt:0, lastInputAt:now, pointerState:{}, interactionLogs:freshLog(stage), log:null, stage, phase:"" };
+}
+function determineEcho() {
+  if (debug.echo) return debug.echo;
+  if (!stageLogs.length) return "";
+  const totals = summarize(stageLogs);
+  const candidates = {
+    mash:totals.aButtonTaps+totals.stopButtonTaps,
+    stroke:totals.strokes+totals.gachaStrokes+totals.lampTouches,
+    hold:(totals.bButtonHolds+totals.gachaButtonHolds)/500,
+    timing:totals.hesitationMs/2500,
+    hide:totals.hides+totals.examCurtainReturns+totals.paperReturned,
+    escape:totals.outsideTaps
+  };
+  const [key,value] = Object.entries(candidates).sort((a,b)=>b[1]-a[1])[0];
+  return value > 1 ? key : "";
+}
+function echoMarkup() { return `<div class="ritual-echo" aria-hidden="true"><i></i><i></i><i></i><span>×</span></div>`; }
+function imagePair(name) { const src=asset(name); return `<img class="experience-backdrop" src="${src}" alt="" aria-hidden="true" draggable="false"><img class="experience-bg" src="${src}" alt="" draggable="false">`; }
 
 function stageMarkup(stage) {
-  const image = asset(stage.images.idle);
-  const bg = `<img class="experience-backdrop" src="${image}" alt="" aria-hidden="true" draggable="false"><img class="experience-bg" src="${image}" alt="" draggable="false">`;
-  if (stage.id === "slot") return `<section class="experience-stage stage-slot">${bg}<div class="stage-overlay"><button class="hotspot hotspot-lamp" data-action="lamp" aria-label="ランプに触れる"></button><button class="hotspot hotspot-lever" data-action="lever" aria-label="レバーを引く"></button><div class="hotspot-stop-buttons" aria-label="停止ボタン"><button class="hotspot stop-one" data-action="stop" aria-label="左の停止ボタン"></button><button class="hotspot stop-two" data-action="stop" aria-label="中央の停止ボタン"></button><button class="hotspot stop-three" data-action="stop" aria-label="右の停止ボタン"></button></div><div class="lamp-glow" aria-hidden="true"></div><p class="experience-hint">ランプ、ボタン、レバー。気になるところへ。</p></div></section>`;
-  if (stage.id === "ball") return `<section class="experience-stage stage-ball">${bg}<div class="stage-overlay"><button class="hotspot hotspot-ball-screen" data-action="screen" aria-label="バトル画面に触れる"></button><div class="screen-flash" aria-hidden="true"></div><div class="handheld-controls"><div class="dpad" aria-label="十字キー"><button data-action="dpad-up" aria-label="上"></button><button data-action="dpad-left" aria-label="左"></button><span></span><button data-action="dpad-right" aria-label="右"></button><button data-action="dpad-down" aria-label="下"></button></div><div class="system-buttons"><button data-action="select" aria-label="SELECT"></button><button data-action="start" aria-label="START"></button></div><div class="ab-buttons"><button class="button-b" data-action="b" aria-label="Bボタン"></button><button class="button-a" data-action="a" aria-label="Aボタン"></button></div></div></div></section>`;
-  if (stage.id === "gacha") return `<section class="experience-stage stage-gacha">${bg}<div class="stage-overlay"><button class="hotspot hotspot-gacha" data-action="gacha" aria-label="一回召喚する"></button><div class="gacha-curtain" aria-hidden="true"><i></i><i></i></div><p class="experience-hint">押す前の一秒まで、あなたのもの。</p></div></section>`;
-  if (stage.id === "mail") return `<section class="experience-stage stage-mail">${bg}<div class="stage-overlay"><button class="hotspot hotspot-envelope" data-action="envelope" aria-label="抽選結果の封筒を開く"></button><div class="mail-cover" aria-hidden="true"></div><p class="experience-hint">封筒は、急がせてこない。</p></div></section>`;
-  return `<section class="experience-stage stage-exam">${bg}<div class="stage-overlay"><button class="hotspot hotspot-exam-button" data-action="exam" aria-label="結果を表示する"></button><button class="hotspot hotspot-exam-result" data-action="exam-result" aria-label="結果欄を少しずつ見る"></button><div class="exam-loading" aria-live="polite"><i></i><span>照会しています</span></div><div class="exam-result-panel" aria-live="polite"><small>照会結果</small><strong></strong><p></p><button type="button" data-action="peek">少しだけ見る</button></div><div class="exam-curtain" aria-hidden="true"></div></div></section>`;
+  const bg = imagePair(stage.images.idle);
+  if (stage.id === "slot") return `<section class="experience-stage stage-slot">${bg}<div class="stage-overlay">${echoMarkup()}<button class="hotspot hotspot-lamp" data-action="lamp" aria-label="ランプをなで、覆う"></button><div class="finger-cover" aria-hidden="true"></div><button class="hotspot hotspot-lever" data-action="lever" aria-label="レバーを下へ引く"></button><div class="hotspot-stop-buttons">${[1,2,3].map(n=>`<button class="hotspot stop-${n}" data-action="stop" data-stop="${n}" aria-label="停止ボタン${n}"></button>`).join("")}</div><div class="lamp-glow"></div><p class="experience-hint">まずは、気になる場所へ触れていい。</p></div></section>`;
+  if (stage.id === "ball") return `<section class="experience-stage stage-ball">${bg}<div class="stage-overlay">${echoMarkup()}<button class="hotspot throw-zone" data-action="throw" aria-label="カプセルを上へ投げる"></button><button class="hotspot capsule-reveal" data-action="capsule" aria-label="カプセルに触れる"></button><div class="screen-flash"></div><div class="handheld-controls"><div class="dpad"><button aria-label="上"></button><button aria-label="左"></button><span></span><button aria-label="右"></button><button data-action="dpad-down" aria-label="下"></button></div><div class="system-buttons"><button aria-label="SELECT"></button><button aria-label="START"></button></div><div class="ab-buttons"><button class="button-b" data-action="b" aria-label="Bボタン"></button><button class="button-a" data-action="a" aria-label="Aボタン"></button></div></div><p class="experience-hint">カプセルを相手へ投げる。</p></div></section>`;
+  if (stage.id === "gacha") return `<section class="experience-stage stage-gacha">${bg}<div class="stage-overlay">${echoMarkup()}<button class="hotspot hotspot-gacha" data-action="gacha" aria-label="召喚ボタンを長押しする"></button><div class="summon-charge"></div><div class="gacha-door" data-action="door"><i></i><i></i></div><button class="gacha-card" data-action="card" aria-label="結果カードをめくる"><span>封</span></button><p class="experience-hint">押す時間も、離す瞬間も、自分で決める。</p></div></section>`;
+  if (stage.id === "mail") return `<section class="experience-stage stage-mail">${bg}<div class="stage-overlay">${echoMarkup()}<button class="hotspot envelope-surface" data-action="envelope" aria-label="封筒をなでる"></button><button class="lottery-flap" data-action="flap" aria-label="封筒のふたを上へ開く"></button><div class="lottery-result-sheet" data-action="paper"><img src="${asset(state.result ? stage.images.win : stage.images.lose)}" alt="抽選結果"><span>紙をゆっくり引き出す</span></div><p class="experience-hint">封筒をなでてもいい。開けるなら、ふたを上へ。</p></div></section>`;
+  return `<section class="experience-stage stage-exam">${bg}<div class="stage-overlay">${echoMarkup()}<button class="hotspot hotspot-exam-button" data-action="exam" aria-label="結果を表示する"></button><div class="exam-loading"><i></i><span>照会中です…</span></div><div class="exam-result-panel"><small>照会結果</small><strong>${state.result ? "合格" : "不合格"}</strong><p>${state.result ? "おめでとうございます。あなたは合格です。" : "今回は合格基準に達しませんでした。"}</p></div><div class="exam-drag-curtain" data-action="curtain"><span>結果は、この下にあります</span></div></div></section>`;
 }
 
-function introMarkup(stage) {
-  return `<section class="stage-intro-panel" data-stage-state="intro">
-    <span>${stage.count}</span>
-    <h2>${stage.title}</h2>
-    <div>${stage.intro.map(text => `<p>${text}</p>`).join("")}</div>
-    <button class="primary-btn" data-action="begin-stage">${stage.startLabel}</button>
-  </section>`;
-}
-
-function startGame() { current = 0; stageLogs = []; el.copyStatus.textContent = ""; showScreen("game"); loadStage(); }
 function loadStage() {
-  clearTimers(); stageState = "intro"; resolving = resolved = false; suppressClick = false;
-  const stage = stages[current]; currentLog = freshLog(stage);
-  el.stageCount.textContent = stage.count; el.stageTitle.textContent = stage.title; el.stagePrompt.textContent = stage.prompt; el.whisper.textContent = "";
-  el.nextBtn.classList.add("hidden"); el.mount.innerHTML = introMarkup(stage);
-  el.mount.querySelector('[data-action="begin-stage"]').addEventListener("click", () => beginStage(stage));
+  clearTimers();
+  const stage = playOrder[playIndex]; state = createState(stage); state.log = state.interactionLogs; activeEcho = determineEcho();
+  el.stageCount.textContent = `${playIndex+1} / ${playOrder.length}${stage.id===favoriteId ? "・本命" : ""}`;
+  el.stageTitle.textContent = stage.title; el.stagePrompt.textContent = stage.prompt; el.stageWhisper.textContent = ""; el.nextBtn.classList.add("hidden");
+  el.experienceMount.innerHTML = `<section class="stage-intro-panel compact-intro" data-action="begin"><span>${stage.id===favoriteId ? "本命・最終記録" : `記録 ${playIndex+1}`}</span><h2>${stage.title}</h2><p>${stage.prompt}</p><small>タップ、または少し待つ</small></section>`;
+  const intro = el.experienceMount.firstElementChild;
+  let started=false; const begin=()=>{ if(started)return; started=true; beginStage(); };
+  intro.addEventListener("pointerdown", begin, {once:true}); later(begin, stage.id===favoriteId ? 3600 : 2600); updateDebug();
 }
-function beginStage(stage) {
-  stageState = "idle"; stageStartedAt = performance.now(); lastInputAt = stageStartedAt;
-  el.mount.innerHTML = stageMarkup(stage); setStageState("idle"); bindStage(stage);
+function beginStage() {
+  if (!state || state.status !== "intro") return;
+  clearTimers(); state.status="idle"; state.startedAt=performance.now(); state.phase="";
+  el.experienceMount.innerHTML=stageMarkup(state.stage);
+  const experience=el.experienceMount.querySelector(".experience-stage");
+  experience.classList.toggle("is-favorite", state.stage.id===favoriteId);
+  if(activeEcho) experience.classList.add(`echo-${activeEcho}`);
+  if(debug.enabled) experience.classList.add("debug-hotspots");
+  bindCommon(experience); bindStage(experience); setStatus("idle");
 }
-function setStageState(state) {
-  stageState = state;
-  const stage = stages[current], experience = el.mount.querySelector(".experience-stage");
-  if (!experience) return;
-  experience.dataset.state = state;
-  experience.classList.remove("state-idle", "state-resolving", "state-loading", "state-win", "state-lose", "is-resolving", "is-revealed", "is-win", "is-lose");
-  experience.classList.add(`state-${state}`);
-  if (state === "resolving" || state === "loading") experience.classList.add("is-resolving");
-  if (state === "win" || state === "lose") experience.classList.add("is-revealed", `is-${state}`);
-  const imageState = state === "loading" ? "resolving" : state;
-  experience.querySelectorAll(".experience-bg, .experience-backdrop").forEach(image => {
-    if (stage.images[imageState]) image.src = asset(stage.images[imageState]);
+function setStatus(status) {
+  if (!state) return; state.status=status;
+  const experience=el.experienceMount.querySelector(".experience-stage"); if(!experience)return;
+  experience.dataset.state=status;
+  ["idle","ritual","resolving","concealed","reveal","win","lose"].forEach(name=>experience.classList.toggle(`state-${name}`,name===status));
+  const imageName=state.stage.images[status] || state.stage.images.idle;
+  experience.querySelectorAll(".experience-bg,.experience-backdrop").forEach(image=>image.src=asset(imageName));
+  updateDebug();
+}
+function recordTouch(event, experience) {
+  const rect=experience.getBoundingClientRect();
+  state.log.touchPoints.push({ x:(event.clientX-rect.left)/rect.width, y:(event.clientY-rect.top)/rect.height });
+  state.log.taps += 1;
+}
+function bindCommon(experience) {
+  experience.addEventListener("pointerdown", event=>{
+    if(state.isRevealed){ if(state.stage.id==="exam" && event.target.closest('[data-action="curtain"]')) state.log.examRehideAttempts++; return; }
+    recordTouch(event,experience); state.lastInputAt=performance.now();
+    if(state.stage.id==="ball"&&state.status==="resolving"&&!event.target.closest(".handheld-controls"))state.log.screenTapsDuringCapture++;
+    if(!event.target.closest("[data-action]")){ state.log.outsideTaps++; if(state.status==="concealed")state.log.hides++; }
+    if(activeEcho==="escape" && !event.target.closest("[data-action]")){ experience.classList.add("echo-react"); later(()=>experience.classList.remove("echo-react"),260); }
+    updateDebug();
   });
 }
-function noteInput() { lastInputAt = performance.now(); }
-
-function bindStage(stage) {
-  const experience = el.mount.querySelector(".experience-stage");
-  experience.addEventListener("pointerdown", event => {
-    if (resolved) return; noteInput(); pointerStart = { x: event.clientX, y: event.clientY }; gestureStroked = false; holdStart = performance.now(); currentLog.taps += 1;
-    const action = event.target.closest("[data-action]")?.dataset.action;
-    if (!action) { currentLog.outsideTaps += 1; if (stage.id === "exam") currentLog.hides += resolving ? 1 : 0; }
-    if (action === "lamp") currentLog.lampTouches += 1;
-    if (action === "screen" && resolving) currentLog.screenTapsDuringCapture += 1;
-    if (action === "envelope") { currentLog.envelopeTouches += 1; suppressClick = false; later(() => { if (holdStart && !resolved) { currentLog.envelopeHolds += 1; currentLog.hides += 1; suppressClick = true; experience.classList.add("is-covered"); el.whisper.textContent = "まだ見ないことにした。"; } }, 620); }
+function pointerGesture(node, handlers={}) {
+  if(!node)return;
+  let pointerId=null, start=null, last=null;
+  node.addEventListener("pointerdown", event=>{
+    if(pointerId!==null)return; pointerId=event.pointerId; start=last={x:event.clientX,y:event.clientY,t:performance.now()};
+    try{node.setPointerCapture(pointerId);}catch{}
+    handlers.down?.(event,start);
   });
-  experience.addEventListener("pointermove", event => {
-    if (!pointerStart || resolved) return;
-    if (Math.hypot(event.clientX - pointerStart.x, event.clientY - pointerStart.y) > 24 && !gestureStroked) { gestureStroked = true; currentLog.strokes += 1; noteInput(); experience.classList.add("is-stroked"); later(() => experience.classList.remove("is-stroked"), 280); }
+  node.addEventListener("pointermove", event=>{
+    if(event.pointerId!==pointerId)return; const point={x:event.clientX,y:event.clientY,t:performance.now()}; handlers.move?.(event,{start,last,point}); last=point;
   });
-  experience.addEventListener("pointerup", () => { if (holdStart) currentLog.longPressMs += Math.round(performance.now() - holdStart); pointerStart = null; holdStart = 0; });
-  experience.addEventListener("pointercancel", () => { pointerStart = null; holdStart = 0; });
-
-  el.mount.querySelectorAll('[data-action="stop"]').forEach(button => button.addEventListener("pointerdown", () => { if (!resolved) { currentLog.stopButtonTaps += 1; noteInput(); button.classList.add("pressed"); later(() => button.classList.remove("pressed"), 100); } }));
-  el.mount.querySelector('[data-action="lever"]')?.addEventListener("click", () => { if (!resolved) { currentLog.leverPulls += 1; runResult(); } });
-  el.mount.querySelector('[data-action="a"]')?.addEventListener("pointerdown", event => { if (!resolved) { event.currentTarget.classList.add("pressed"); currentLog.aButtonTaps += 1; noteInput(); if (!resolving) runResult(); } });
-  el.mount.querySelector('[data-action="a"]')?.addEventListener("pointerup", event => event.currentTarget.classList.remove("pressed"));
-  const bButton = el.mount.querySelector('[data-action="b"]'); let bStarted = 0;
-  bButton?.addEventListener("pointerdown", event => { if (!resolved) { event.currentTarget.setPointerCapture(event.pointerId); event.currentTarget.classList.add("pressed"); bStarted = performance.now(); noteInput(); } });
-  const releaseB = event => { if (bStarted) { currentLog.bButtonHolds += Math.round(performance.now() - bStarted); bStarted = 0; event.currentTarget.classList.remove("pressed"); noteInput(); } };
-  bButton?.addEventListener("pointerup", releaseB); bButton?.addEventListener("pointercancel", releaseB);
-  el.mount.querySelector('[data-action="dpad-down"]')?.addEventListener("pointerdown", event => { if (!resolved) { currentLog.dpadDownTaps += 1; noteInput(); event.currentTarget.classList.add("pressed"); later(() => event.currentTarget.classList.remove("pressed"), 120); } });
-  const gachaButton = el.mount.querySelector('[data-action="gacha"]'); let gachaStarted = 0;
-  gachaButton?.addEventListener("pointerdown", () => { if (!resolved) { gachaStarted = performance.now(); noteInput(); } });
-  gachaButton?.addEventListener("pointerup", () => { if (!resolved && gachaStarted) { currentLog.gachaButtonHolds += Math.round(performance.now() - gachaStarted); currentLog.gachaHesitationMs = Math.round(performance.now() - stageStartedAt); gachaStarted = 0; runResult(); } });
-  el.mount.querySelector('[data-action="envelope"]')?.addEventListener("click", () => { if (!resolved && !suppressClick) { currentLog.envelopeHesitationMs = Math.round(performance.now() - stageStartedAt); runResult(); } suppressClick = false; });
-  el.mount.querySelector('[data-action="exam"]')?.addEventListener("click", () => { if (!resolved) { currentLog.examHesitationMs = Math.round(performance.now() - stageStartedAt); runResult(); } });
-  el.mount.querySelector('[data-action="exam-result"]')?.addEventListener("click", () => { if (resolving) peekExam(); });
-  el.mount.querySelector('[data-action="peek"]')?.addEventListener("click", peekExam);
+  const finish=(event,cancelled)=>{ if(event.pointerId!==pointerId)return; const point={x:event.clientX,y:event.clientY,t:performance.now()}; handlers.up?.(event,{start,last,point,cancelled}); pointerId=null; start=last=null; };
+  node.addEventListener("pointerup",event=>finish(event,false)); node.addEventListener("pointercancel",event=>finish(event,true));
 }
 
-function runResult() {
-  if (resolving || resolved) return;
-  resolving = true; resolveStartedAt = performance.now(); lastInputAt = resolveStartedAt; currentLog.hesitationMs = Math.round(resolveStartedAt - stageStartedAt);
-  const stage = stages[current];
-  setStageState(stage.id === "exam" ? "loading" : "resolving");
-  if (stage.id === "slot") el.whisper.textContent = "...";
-  if (stage.id === "ball") el.whisper.textContent = "...";
-  if (stage.id === "gacha") el.whisper.textContent = "...";
-  if (stage.id === "mail") el.whisper.textContent = "...";
-  if (stage.id === "exam") el.whisper.textContent = "...";
-  const delay = stage.id === "ball" ? 3200 : stage.id === "slot" ? 2700 : stage.id === "exam" ? 2200 : 2400;
-  later(revealResult, delay);
+function bindStage(experience) {
+  ({slot:bindSlot,ball:bindBall,gacha:bindGacha,mail:bindMail,exam:bindExam})[state.stage.id](experience);
 }
-function peekExam() {
-  if (!resolving || resolved) return; currentLog.examPeeks += 1; currentLog.hides += 1; noteInput();
-  const experience = el.mount.querySelector(".experience-stage"); experience.classList.remove("peek-1", "peek-2"); experience.classList.add(currentLog.examPeeks > 1 ? "peek-2" : "peek-1");
+function bindSlot(root) {
+  const lamp=root.querySelector('[data-action="lamp"]'), cover=root.querySelector(".finger-cover"); let strokeDistance=0, coverStarted=0;
+  pointerGesture(lamp,{
+    down:(event)=>{ state.log.lampTouches++; strokeDistance=0; if(state.status==="concealed"){coverStarted=performance.now();root.classList.add("lamp-covered");moveCover(event);} },
+    move:(event,{last,point})=>{ const distance=Math.hypot(point.x-last.x,point.y-last.y);state.log.lampDistance+=distance;strokeDistance+=distance;if(strokeDistance>35){state.log.strokes++;strokeDistance=-9999;}if(state.status==="concealed")moveCover(event); },
+    up:(event,{cancelled})=>{root.classList.remove("lamp-covered");if(state.status==="concealed"&&coverStarted&&!cancelled){state.log.lampCoverMs+=performance.now()-coverStarted;state.log.revealHesitationMs=performance.now()-state.resolvedAt;revealStage("lamp-release");}coverStarted=0;}
+  });
+  function moveCover(event){const rect=root.getBoundingClientRect();cover.style.left=`${event.clientX-rect.left}px`;cover.style.top=`${event.clientY-rect.top}px`;}
+  let leverDone=false;
+  pointerGesture(root.querySelector('[data-action="lever"]'),{
+    down:()=>{if(state.status==="idle")setStatus("ritual");},
+    move:(event,{start,point})=>{if(!leverDone&&["idle","ritual"].includes(state.status)&&point.y-start.y>48){leverDone=true;state.log.leverPulls++;state.log.leverPullDelayMs=performance.now()-state.startedAt;state.log.hesitationMs=state.log.leverPullDelayMs;state.resolvedAt=performance.now();setStatus("resolving");sound("pull");vibrate(18);el.stageWhisper.textContent="三つの停止ボタンを、自分の順番で。";}},
+    up:(_,data)=>{if(data.cancelled&&!leverDone)setStatus("idle");}
+  });
+  const stopped=new Set(); root.querySelectorAll('[data-action="stop"]').forEach(button=>button.addEventListener("pointerdown",()=>{
+    if(state.status!=="resolving")return; const number=Number(button.dataset.stop);state.log.stopButtonTaps++;state.log.stopOrder.push(number);stopped.add(number);button.classList.add("pressed");later(()=>button.classList.remove("pressed"),120);sound("stop");vibrate(8);
+    if(stopped.size===3){state.isResolved=true;state.resolvedAt=performance.now();setStatus("concealed");el.stageWhisper.textContent="ランプを指で隠す。離した瞬間だけ、結果が見える。";}
+  }));
 }
-function revealResult() {
-  const stage = stages[current], experience = el.mount.querySelector(".experience-stage");
-  currentLog.waitNoInputMs = Math.max(0, Math.round(performance.now() - Math.max(resolveStartedAt, lastInputAt)));
-  const isWin = Math.random() < 0.5;
-  currentLog.result = isWin ? "成功" : "失敗"; resolving = false; resolved = true;
-  setStageState(isWin ? "win" : "lose");
-  if (stage.id === "exam") { const panel = experience.querySelector(".exam-result-panel"); panel.querySelector("strong").textContent = isWin ? "合格" : "不合格"; panel.querySelector("p").textContent = isWin ? "おめでとうございます。あなたは合格です。" : "今回は合格基準に達しませんでした。"; }
-  el.whisper.textContent = isWin ? stage.winText : stage.loseText; el.nextBtn.textContent = current === stages.length - 1 ? "MY儀式を診断する" : "次の結果へ"; el.nextBtn.classList.remove("hidden");
+function bindBall(root) {
+  let thrown=false;
+  pointerGesture(root.querySelector('[data-action="throw"]'),{
+    move:(event,{start,point})=>{if(thrown||state.status!=="idle")return;const dy=point.y-start.y,dt=Math.max(1,point.t-start.t);if(dy < -55){thrown=true;state.log.throwSpeed=Math.round(Math.abs(dy)/dt*1000);state.log.hesitationMs=performance.now()-state.startedAt;state.resolvedAt=performance.now();setStatus("resolving");sound("throw");vibrate(12);el.stageWhisper.textContent="揺れている間、押したいものを押していい。";[520,1180,1840].forEach((ms,index)=>later(()=>{if(state.status!=="resolving")return;root.classList.remove("shake-1","shake-2","shake-3");root.classList.add(`shake-${index+1}`);sound("shake");vibrate(7);},ms));later(()=>{if(state.status!=="resolving")return;state.isResolved=true;state.resolvedAt=performance.now();setStatus("concealed");el.stageWhisper.textContent="三度、揺れた。最後の入力で確かめる。";},2250);}},
+    up:(_,data)=>{if(!thrown&&!data.cancelled)el.stageWhisper.textContent="カプセルを上へ投げる。";}
+  });
+  const a=root.querySelector('[data-action="a"]'); a.addEventListener("pointerdown",()=>{if(!["resolving","concealed"].includes(state.status))return;state.log.aButtonTaps++;a.classList.add("pressed");root.classList.add("a-sync");later(()=>root.classList.remove("a-sync"),90);sound("click");if(state.status==="concealed")revealBall("Aボタン");});a.addEventListener("pointerup",()=>a.classList.remove("pressed"));
+  let bStart=0; const b=root.querySelector('[data-action="b"]');pointerGesture(b,{down:()=>{if(["resolving","concealed"].includes(state.status)){bStart=performance.now();b.classList.add("pressed");root.classList.add("b-hold");}},up:(_,data)=>{if(!bStart)return;state.log.bButtonHolds+=performance.now()-bStart;bStart=0;b.classList.remove("pressed");root.classList.remove("b-hold");if(state.status==="concealed"&&!data.cancelled)revealBall("Bを離す");}});
+  root.querySelector('[data-action="dpad-down"]').addEventListener("pointerdown",event=>{if(!["resolving","concealed"].includes(state.status))return;state.log.dpadDownTaps++;event.currentTarget.classList.add("pressed");root.classList.add("dpad-sink");later(()=>{event.currentTarget.classList.remove("pressed");root.classList.remove("dpad-sink");},130);});
+  root.querySelector('[data-action="capsule"]').addEventListener("pointerdown",()=>{if(state.status==="concealed")revealBall("カプセルをタップ");else if(state.status==="resolving")state.log.screenTapsDuringCapture++;});
+  function revealBall(action){state.log.revealAction=action;state.log.postShakeRevealMs=performance.now()-state.resolvedAt;revealStage(action);}
+}
+function bindGacha(root) {
+  const button=root.querySelector('[data-action="gacha"]');let pressedAt=0,travel=0;
+  const updateCharge=()=>{if(!pressedAt)return;const charge=Math.min(1,(performance.now()-pressedAt)/1800);root.style.setProperty("--charge-scale",String(.35+charge*.65));root.style.setProperty("--charge-brightness",String(.8+charge*.25));tone(115+charge*210,.13,"sine",.012);later(updateCharge,260);};
+  pointerGesture(button,{down:()=>{if(state.status!=="idle")return;pressedAt=performance.now();setStatus("ritual");root.classList.add("charging");updateCharge();},move:(event,{last,point})=>{if(!pressedAt)return;travel+=Math.hypot(point.x-last.x,point.y-last.y);if(travel>28){state.log.gachaStrokes++;travel=-9999;}},up:(_,data)=>{if(!pressedAt)return;const held=performance.now()-pressedAt;pressedAt=0;root.classList.remove("charging");if(data.cancelled){setStatus("idle");return;}state.log.gachaButtonHolds+=held;state.log.longPressMs+=held;state.log.gachaHesitationMs=performance.now()-state.startedAt;state.log.hesitationMs=state.log.gachaHesitationMs;state.resolvedAt=performance.now();setStatus("resolving");sound("summon");vibrate(16);el.stageWhisper.textContent="封印が閉じた。左右へ開く。";later(()=>{if(state.status!=="resolving")return;state.isResolved=true;state.resolvedAt=performance.now();state.phase="door";setStatus("concealed");},1200);}});
+  let doorBase=0;
+  pointerGesture(root.querySelector('[data-action="door"]'),{down:()=>{if(state.status==="concealed"&&state.phase==="door")doorBase=performance.now();},move:(event,{start,point})=>{if(state.phase!=="door")return;const progress=Math.min(1,Math.abs(point.x-start.x)/120);root.style.setProperty("--door-left",`${progress*-54}%`);root.style.setProperty("--door-right",`${progress*54}%`);},up:(_,data)=>{if(state.phase!=="door")return;const distance=Math.abs(data.point.x-data.start.x);if(distance<92||data.cancelled){state.log.doorStops++;root.style.setProperty("--door-left","0%");root.style.setProperty("--door-right","0%");return;}state.log.doorOpenMs=performance.now()-state.resolvedAt;state.phase="card";root.classList.add("door-open","card-ready");sound("door");vibrate(10);el.stageWhisper.textContent="カードはまだ裏向き。触れれば、確定する。";}});
+  pointerGesture(root.querySelector('[data-action="card"]'),{down:()=>{if(state.phase==="card")state.log.cardTouches++;},up:(_,data)=>{if(state.phase!=="card"||data.cancelled)return;const dy=data.point.y-data.start.y,dt=data.point.t-data.start.t;if(dy < -35 || dt<420){state.log.cardRevealMs=performance.now()-(state.resolvedAt+state.log.doorOpenMs);sound("card");revealStage("カードをめくる");}}});
+}
+function bindMail(root) {
+  let envelopeTravel=0;
+  pointerGesture(root.querySelector('[data-action="envelope"]'),{down:()=>{if(state.status==="idle")state.log.envelopeTouches++;},move:(event,{last,point})=>{if(state.status!=="idle")return;const d=Math.hypot(point.x-last.x,point.y-last.y);state.log.envelopeDistance+=d;envelopeTravel+=d;if(envelopeTravel>35){state.log.strokes++;envelopeTravel=-9999;sound("paper");}}});
+  pointerGesture(root.querySelector('[data-action="flap"]'),{down:()=>{if(state.status==="idle")setStatus("ritual");},move:(event,{start,point})=>{if(!["idle","ritual"].includes(state.status))return;const progress=Math.min(1,Math.max(0,(start.y-point.y)/85));root.style.setProperty("--flap-angle",`${progress*-72}deg`);},up:(_,data)=>{if(!["idle","ritual"].includes(state.status))return;const amount=data.start.y-data.point.y;if(amount<58||data.cancelled){root.style.setProperty("--flap-angle","0deg");setStatus("idle");return;}state.log.flapOpenMs=performance.now()-state.startedAt;state.log.envelopeHesitationMs=state.log.flapOpenMs;state.log.hesitationMs=state.log.flapOpenMs;state.resolvedAt=performance.now();state.isResolved=true;state.phase="paper";setStatus("concealed");root.classList.add("flap-open");sound("paper");vibrate(9);el.stageWhisper.textContent="紙を引く量だけ、結果が見える。途中で止めてもいい。";}});
+  let baseProgress=0,maxProgress=0,dragStartTime=0,textVisibleAt=0,lastPaperSound=0;
+  pointerGesture(root.querySelector('[data-action="paper"]'),{down:()=>{if(state.phase==="paper")dragStartTime=performance.now();},move:(event,{start,point})=>{if(state.phase!=="paper")return;const progress=Math.min(1,Math.max(0,baseProgress+(start.y-point.y)/190));if(progress>.35&&!textVisibleAt)textVisibleAt=performance.now();if(progress<maxProgress-.08)state.log.paperReturned=1;maxProgress=Math.max(maxProgress,progress);root.style.setProperty("--paper-y",`${(1-progress)*70}%`);root.style.setProperty("--paper-cover",`${(1-progress)*100}%`);state.pointerState.paperProgress=progress;if(performance.now()-lastPaperSound>110){lastPaperSound=performance.now();sound("paper");}},up:(_,data)=>{if(state.phase!=="paper")return;const previous=baseProgress,progress=state.pointerState.paperProgress||baseProgress,elapsed=Math.max(1,performance.now()-dragStartTime);state.log.paperSpeed=Math.round(Math.abs(progress-baseProgress)*190/elapsed*1000);if(data.cancelled){root.style.setProperty("--paper-y",`${(1-previous)*70}%`);root.style.setProperty("--paper-cover",`${(1-previous)*100}%`);state.log.paperStops++;return;}baseProgress=progress;if(progress<.88){state.log.paperStops++;return;}state.log.textRevealMs=textVisibleAt?performance.now()-textVisibleAt:0;revealStage("通知を最後まで引く");}});
+}
+function bindExam(root) {
+  root.querySelector('[data-action="exam"]').addEventListener("pointerdown",()=>{
+    if(state.status!=="idle")return;state.log.examHesitationMs=performance.now()-state.startedAt;state.log.hesitationMs=state.log.examHesitationMs;state.resolvedAt=performance.now();setStatus("resolving");sound("click");vibrate(8);el.stageWhisper.textContent="照会中です…";later(()=>{if(state.status!=="resolving")return;state.isResolved=true;state.resolvedAt=performance.now();state.phase="curtain";setStatus("concealed");el.stageWhisper.textContent="カーテンを上へ。戻せば、また隠せる。";},2100);
+  });
+  let base=0,max=0,started=0,returnedThisGesture=false;
+  pointerGesture(root.querySelector('[data-action="curtain"]'),{down:()=>{if(state.phase==="curtain"){started=performance.now();returnedThisGesture=false;state.log.examCurtainMoves++;}},move:(event,{start,point})=>{if(state.phase!=="curtain")return;const progress=Math.min(1,Math.max(0,base+(start.y-point.y)/190));if(progress<max-.06&&!returnedThisGesture){returnedThisGesture=true;state.log.examCurtainReturns++;state.log.examPeeks++;state.log.hides++;}max=Math.max(max,progress);state.pointerState.curtainProgress=progress;root.style.setProperty("--curtain-y",`${progress*-92}%`);},up:(_,data)=>{if(state.phase!=="curtain")return;const previous=base,progress=state.pointerState.curtainProgress||base;if(data.cancelled){root.style.setProperty("--curtain-y",`${previous*-92}%`);return;}base=progress;if(progress>=.78){state.log.examRevealMs=performance.now()-state.resolvedAt;sound("reveal");revealStage("カーテンを開く");}}});
+}
+
+function revealStage(action) {
+  if (!state || state.isRevealed || !state.isResolved) return;
+  state.isRevealed=true;state.revealedAt=performance.now();state.log.waitNoInputMs=Math.max(0,state.revealedAt-Math.max(state.resolvedAt,state.lastInputAt));state.log.result=state.result?"成功":"失敗";
+  setStatus("reveal"); el.stageWhisper.textContent=""; vibrate(state.stage.id===favoriteId?[22,35,28]:14);
+  later(()=>{if(!state?.isRevealed)return;setStatus(state.result?"win":"lose");sound(state.result?"success":"fail");el.stageWhisper.textContent=state.result?"届いた。":"静かに、届かなかった。";el.nextBtn.textContent=playIndex===playOrder.length-1?"黒歴史を開示する":"次の記録へ";el.nextBtn.classList.remove("hidden");updateDebug(action);},180);
 }
 function nextStage() {
-  if (!resolved) return; stageLogs.push(currentLog);
-  if (current === stages.length - 1) return showResult(); current += 1; loadStage();
+  if(!state?.isRevealed)return;
+  stageLogs.push(state.log); clearTimers();
+  if(playIndex>=playOrder.length-1){showResult();return;}
+  playIndex++;loadStage();
 }
 
+function summarize(logs) {
+  const totals={success:0,touchPoints:[]};
+  logs.forEach(log=>Object.entries(log).forEach(([key,value])=>{
+    if(typeof value==="number")totals[key]=(totals[key]||0)+value;
+    if(key==="touchPoints")totals.touchPoints.push(...value);
+  }));
+  totals.success=logs.filter(log=>log.result==="成功").length;return totals;
+}
 function analyzeLogs(logs) {
-  const keys = Object.keys(freshLog({ id: "", title: "" })).filter(key => typeof freshLog({ id: "", title: "" })[key] === "number");
-  const totals = Object.fromEntries(keys.map(key => [key, 0])); totals.success = 0;
-  logs.forEach(log => { keys.forEach(key => totals[key] += log[key]); totals.success += log.result === "成功" ? 1 : 0; });
-  const scores = {
-    resonance: totals.lampTouches * 2 + totals.screenTapsDuringCapture * 1.2 + totals.dpadDownTaps * 2,
-    mash: totals.stopButtonTaps * 3 + totals.aButtonTaps * 3 + totals.taps * .25,
-    hide: totals.hides * 7 + totals.examPeeks * 4 + totals.envelopeHolds * 4,
-    stroke: totals.strokes * 5 + totals.envelopeTouches * .8 + totals.lampTouches,
-    timing: totals.hesitationMs / 900 + totals.gachaButtonHolds / 280 + totals.bButtonHolds / 350,
-    stare: Math.max(4, totals.waitNoInputMs / 500 - totals.aButtonTaps - totals.stopButtonTaps),
-    escape: totals.outsideTaps * 4 + totals.examPeeks * 5
+  const t=summarize(logs),totalPresses=t.aButtonTaps+t.stopButtonTaps+t.dpadDownTaps;
+  const scores={
+    resonance:t.lampTouches*2+t.screenTapsDuringCapture*2+t.dpadDownTaps*2,
+    mash:t.aButtonTaps*3+t.stopButtonTaps*3+t.taps*.2,
+    hide:t.hides*6+t.examCurtainReturns*5+t.paperReturned*7+t.lampCoverMs/500,
+    stroke:t.strokes*6+t.gachaStrokes*5+t.lampDistance/90+t.envelopeDistance/100,
+    timing:t.hesitationMs/850+t.gachaButtonHolds/350+t.revealHesitationMs/600,
+    stare:Math.max(3,t.waitNoInputMs/650-totalPresses),
+    escape:t.outsideTaps*5
   };
-  const typeKey = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
-  const clamp = value => Math.max(0, Math.min(100, Math.round(value)));
-  const faith = clamp(totals.aButtonTaps * 4 + totals.stopButtonTaps * 3 + totals.strokes * 7 + totals.lampTouches * 2 + totals.dpadDownTaps * 4);
-  const hesitation = clamp(totals.hesitationMs / 650 + totals.gachaButtonHolds / 180 + totals.bButtonHolds / 250);
-  const avoidance = clamp(totals.hides * 12 + totals.outsideTaps * 3 + totals.examPeeks * 8);
-  const human = clamp((faith + hesitation + avoidance + 45) / 2.4);
-  return { totals, typeKey, faith, hesitation, avoidance, human };
+  const [typeKey,topScore]=Object.entries(scores).sort((a,b)=>b[1]-a[1])[0];
+  const sum=Math.max(1,Object.values(scores).reduce((a,b)=>a+b,0));
+  const clamp=n=>Math.max(0,Math.min(100,Math.round(n)));
+  return {totals:t,scores,typeKey,topScore,share:topScore/sum,faith:clamp(totalPresses*4+t.strokes*7),hesitation:clamp(t.hesitationMs/700+t.revealHesitationMs/350),avoidance:clamp(t.hides*12+t.outsideTaps*4+t.examCurtainReturns*7),human:clamp(48+(totalPresses+t.strokes+t.hides)*2)};
 }
-function logSummary(log) {
-  if (log.stageId === "slot") return `ランプ接触 ${log.lampTouches} / レバー ${log.leverPulls} / 停止ボタン ${log.stopButtonTaps}`;
-  if (log.stageId === "ball") return `A連打 ${log.aButtonTaps} / B長押し ${(log.bButtonHolds / 1000).toFixed(1)}秒 / ↓入力 ${log.dpadDownTaps} / 捕獲中画面タップ ${log.screenTapsDuringCapture}`;
-  if (log.stageId === "gacha") return `押すまで ${(log.gachaHesitationMs / 1000).toFixed(1)}秒 / 長押し ${(log.gachaButtonHolds / 1000).toFixed(1)}秒 / なで ${log.strokes}`;
-  if (log.stageId === "mail") return `開けるまで ${(log.envelopeHesitationMs / 1000).toFixed(1)}秒 / 封筒接触 ${log.envelopeTouches} / 長押し ${log.envelopeHolds} / なで ${log.strokes}`;
-  return `押すまで ${(log.examHesitationMs / 1000).toFixed(1)}秒 / 少しずつ見る ${log.examPeeks} / 画面外 ${log.outsideTaps}`;
+function diagnosticReason(analysis) {
+  const t=analysis.totals,percent=Math.round(analysis.share*100),seconds=ms=>(ms/1000).toFixed(1);
+  return ({
+    resonance:`ランプへ${t.lampTouches}回触れ、捕獲中の画面入力を${t.screenTapsDuringCapture}回、十字キー下を${t.dpadDownTaps}回記録しました。演出へ合わせる入力が診断点の${percent}%を占めました。`,
+    mash:`Aボタンを${t.aButtonTaps}回、停止ボタンを${t.stopButtonTaps}回押しました。連打系入力が診断点の${percent}%を占めました。`,
+    hide:`隠す行動を${t.hides}回、カーテンを戻す動きを${t.examCurtainReturns}回記録しました。見えない状態を延長する行動が最も強く観測されました。`,
+    stroke:`ランプ上を${Math.round(t.lampDistance)}px、封筒上を${Math.round(t.envelopeDistance)}px移動し、なで操作を${t.strokes+t.gachaStrokes}回記録しました。`,
+    timing:`結果操作まで合計${seconds(t.hesitationMs)}秒、結果確定後も${seconds(t.revealHesitationMs)}秒待ちました。押せるのに押さない時間が最も強く観測されました。`,
+    stare:`結果が決まったあと、合計${seconds(t.waitNoInputMs)}秒を無操作で見守りました。沈黙が他の操作を上回りました。`,
+    escape:`結果欄ではない場所を${t.outsideTaps}回触りました。関係のない余白へ向かった入力が最も強く観測されました。`
+  })[analysis.typeKey];
 }
-function getFortune(hitCount) {
-  return [
-    { rank: "逆神の日", comment: "今日は何かをするより、静かに寝た方がいい日です。" },
-    { rank: "低空飛行", comment: "運は渋め。でも、ひとつ拾えただけまだマシ。" },
-    { rank: "普通の日", comment: "良くも悪くも現実的。期待しすぎなければ悪くない。" },
-    { rank: "なかなか持ってる", comment: "5回中3回当たり。今日は自分信じていい日かもしれません。" },
-    { rank: "かなり強い", comment: "ここぞという場面で引けている。ちょっと調子に乗っていい日。" },
-    { rank: "豪運", comment: "全部当たり。今日のあなたは、全ての祈りが届くでしょう。" }
-  ][hitCount];
+function replayLines(t) {
+  const lines=[];
+  if(t.aButtonTaps)lines.push(`Aボタンを <strong>${t.aButtonTaps}回</strong> 押し、`);
+  if(t.bButtonHolds)lines.push(`Bボタンを <strong>${(t.bButtonHolds/1000).toFixed(1)}秒</strong> 握り、`);
+  if(t.lampTouches||t.strokes)lines.push(`ランプや画面を <strong>${t.lampTouches+t.strokes}回</strong> なで、`);
+  if(t.stopButtonTaps)lines.push(`停止ボタンを <strong>${t.stopButtonTaps}回</strong> 叩き、`);
+  if(t.envelopeHesitationMs)lines.push(`封筒を開くまで <strong>${(t.envelopeHesitationMs/1000).toFixed(1)}秒</strong> ためらい、`);
+  if(t.examCurtainReturns)lines.push(`合否のカーテンを <strong>${t.examCurtainReturns}回</strong> 戻し、`);
+  if(t.outsideTaps)lines.push(`関係のない余白を <strong>${t.outsideTaps}回</strong> 触りました。`);
+  if(!lines.length)lines.push(`あなたは余計なことをせず、ただ結果を見つめ続けました。`);
+  lines[lines.length-1]=lines.at(-1).replace(/、$/,"。");return lines;
 }
-function buildDiagnosticReason(typeKey, totals) {
-  const seconds = milliseconds => (milliseconds / 1000).toFixed(1);
-  const evidence = {
-    resonance: `ランプ接触${totals.lampTouches}回、捕獲中の画面タップ${totals.screenTapsDuringCapture}回、十字キー下入力${totals.dpadDownTaps}回を記録しました。`,
-    mash: `Aボタン${totals.aButtonTaps}回、停止ボタン${totals.stopButtonTaps}回、全体タップ${totals.taps}回を記録しました。`,
-    hide: `隠す行動${totals.hides}回、結果欄外タップ${totals.outsideTaps}回、少しずつ見る操作${totals.examPeeks}回を記録しました。`,
-    stroke: `なで操作${totals.strokes}回、ランプ接触${totals.lampTouches}回、封筒接触${totals.envelopeTouches}回を記録しました。`,
-    timing: `結果を押すまでの累計は${seconds(totals.hesitationMs)}秒、ボタン長押しは${seconds(totals.gachaButtonHolds + totals.bButtonHolds)}秒でした。`,
-    stare: `結果待ち中、操作せず見守った時間は合計${seconds(totals.waitNoInputMs)}秒でした。`,
-    escape: `結果欄外タップ${totals.outsideTaps}回、少しずつ見る操作${totals.examPeeks}回を記録しました。`
-  };
-  return `${evidence[typeKey]} ${typeDefs[typeKey].reason}`;
+function getFortune(hits){return [
+  ["逆神の日","今日は引くより、静かに寝た方がいい日。"],["低空飛行","運は渋め。でも、ひとつ拾えただけまだ人間。"],
+  ["普通の日","良くも悪くも現実的。期待しすぎなければ悪くない。"],["なかなか持ってる","5回中3回当たり。今日はまだ信じていい日かもしれません。"],
+  ["かなり強い","ここぞという場面で引けている。ちょっと調子に乗っていい。"],["豪運","全部当たり。今日だけは、儀式が効いたことにしていい。"]
+][Math.max(0,Math.min(5,hits))];}
+function favoriteCopy(log,otherWins){
+  if(log.result==="成功"&&otherWins===0)return ["最後の一つが救った","連敗のあと、本命だけが応えました。"];if(log.result==="失敗"&&otherWins===stageLogs.length-1)return ["本命だけ届かず",`${otherWins}つの結果を引き寄せましたが、本命だけは沈黙しました。`];if(log.result==="成功")return ["本命成就","あなたが最も願った結果は、当たりでした。"];return ["本命沈黙","ほかの結果とは別に、本命だけは静かに閉じました。"];
 }
-function showResult() {
-  const analysis = analyzeLogs(stageLogs), type = typeDefs[analysis.typeKey]; showScreen("result");
-  el.resultIcon.src = asset(type.icon); el.resultIcon.alt = type.name; el.resultType.textContent = type.name; el.resultTitle.textContent = type.title;
-  el.resultSummary.textContent = type.summary; el.resultBehavior.textContent = type.behavior; el.resultReason.textContent = buildDiagnosticReason(analysis.typeKey, analysis.totals);
-  el.scoreFaith.textContent = analysis.faith; el.scoreHesitation.textContent = analysis.hesitation; el.scoreAvoidance.textContent = analysis.avoidance; el.scoreHuman.textContent = analysis.human;
-  const fortune = getFortune(analysis.totals.success);
-  el.fortuneHits.textContent = `${analysis.totals.success} / 5`;
-  el.fortuneRank.textContent = fortune.rank;
-  el.fortuneComment.textContent = fortune.comment;
-  el.finalLog.innerHTML = stageLogs.map(log => `<article><header><strong>${log.stageTitle}</strong><span>${log.result}</span></header><p>${logSummary(log)}</p><small>ためらい ${(log.hesitationMs / 1000).toFixed(1)}秒 / 結果待ちの無操作 ${(log.waitNoInputMs / 1000).toFixed(1)}秒</small></article>`).join("");
+function logSummary(log){
+  if(log.stageId==="slot")return `なで ${log.lampTouches}回 / 移動 ${Math.round(log.lampDistance)}px / 停止順 ${log.stopOrder.join("→")||"なし"} / 隠した ${(log.lampCoverMs/1000).toFixed(1)}秒`;
+  if(log.stageId==="ball")return `A ${log.aButtonTaps}回 / B ${(log.bButtonHolds/1000).toFixed(1)}秒 / 投擲 ${log.throwSpeed}px/秒 / 開示 ${log.revealAction||"なし"}`;
+  if(log.stageId==="gacha")return `長押し ${(log.gachaButtonHolds/1000).toFixed(1)}秒 / 扉停止 ${log.doorStops}回 / カード接触 ${log.cardTouches}回`;
+  if(log.stageId==="mail")return `封筒移動 ${Math.round(log.envelopeDistance)}px / 紙停止 ${log.paperStops}回 / 紙を戻した ${log.paperReturned?"はい":"いいえ"}`;
+  return `押すまで ${(log.examHesitationMs/1000).toFixed(1)}秒 / カーテン ${log.examCurtainMoves}回 / 戻した ${log.examCurtainReturns}回 / 欄外 ${log.outsideTaps}回`;
 }
-function buildShareText() { return ["MY儀式 診断結果", `タイプ：${el.resultType.textContent}`, `称号：${el.resultTitle.textContent}`, `今日の運勢：${el.fortuneRank.textContent}`, `当たり数：${el.fortuneHits.textContent}`, `信仰心：${el.scoreFaith.textContent}`, `ためらい：${el.scoreHesitation.textContent}`, `現実逃避：${el.scoreAvoidance.textContent}`, `人間味：${el.scoreHuman.textContent}`, "", "見るまで確定じゃない。", "#MY儀式"].join("\n"); }
-async function shareResult() {
-  const text = buildShareText();
-  const shareData = { title: "MY儀式", text, url: location.href };
-  el.copyStatus.textContent = "";
+function renderHeatmaps(){
+  el.heatmapGrid.innerHTML=stageLogs.map((log,index)=>{const stage=stages.find(item=>item.id===log.stageId);return `<figure><div><img src="${asset(stage.image)}" alt="${stage.title}"><canvas data-heatmap="${index}" width="240" height="426"></canvas></div><figcaption>${stage.title}・${log.touchPoints.length}接触</figcaption></figure>`;}).join("");
+  requestAnimationFrame(()=>el.heatmapGrid.querySelectorAll("canvas").forEach(canvas=>{const log=stageLogs[Number(canvas.dataset.heatmap)],ctx=canvas.getContext("2d");ctx.clearRect(0,0,canvas.width,canvas.height);log.touchPoints.forEach((point,index)=>{const nearby=log.touchPoints.filter(other=>Math.hypot(other.x-point.x,other.y-point.y)<.09).length,radius=Math.min(30,8+nearby*2);const gradient=ctx.createRadialGradient(point.x*240,point.y*426,0,point.x*240,point.y*426,radius);gradient.addColorStop(0,`rgba(255,39,112,${Math.min(.78,.25+nearby*.08)})`);gradient.addColorStop(1,"rgba(116,19,155,0)");ctx.fillStyle=gradient;ctx.beginPath();ctx.arc(point.x*240,point.y*426,radius,0,Math.PI*2);ctx.fill();});}));
+}
+function showResult(){
+  showScreen("result");const analysis=analyzeLogs(stageLogs),t=analysis.totals,type=typeDefs[analysis.typeKey];
+  el.replayText.innerHTML=`<p>あなたは結果を待つ間に、</p>${replayLines(t).map(line=>`<p>${line}</p>`).join("")}`;
+  el.strongestRitual.textContent=type.behavior;el.strongestEvidence.textContent=diagnosticReason(analysis);renderHeatmaps();
+  el.resultIcon.src=asset(type.icon);el.resultIcon.alt=type.name;el.resultType.textContent=type.name;el.resultTitle.textContent=type.title;el.resultSummary.textContent=type.summary;el.resultBehavior.textContent=type.behavior;el.resultReason.textContent=diagnosticReason(analysis);
+  const favoriteLog=stageLogs.find(log=>log.stageId===favoriteId)||stageLogs.at(-1),otherWins=stageLogs.filter(log=>log!==favoriteLog&&log.result==="成功").length,[favoriteOutcome,favoriteComment]=favoriteCopy(favoriteLog,otherWins);
+  el.favoriteResultTitle.textContent=favoriteLog.stageTitle;el.favoriteResultOutcome.textContent=favoriteOutcome;el.favoriteResultComment.textContent=favoriteComment;
+  el.scoreFaith.textContent=analysis.faith;el.scoreHesitation.textContent=analysis.hesitation;el.scoreAvoidance.textContent=analysis.avoidance;el.scoreHuman.textContent=analysis.human;
+  const [rank,comment]=getFortune(t.success);el.fortuneHits.textContent=`${t.success} / ${stageLogs.length}`;el.fortuneRank.textContent=rank;el.fortuneComment.textContent=comment;
+  el.finalLog.innerHTML=stageLogs.map(log=>`<article class="${log.stageId===favoriteId?"favorite-log":""}"><header><strong>${log.stageTitle}${log.stageId===favoriteId?"・本命":""}</strong><span>${log.result}</span></header><p>${logSummary(log)}</p></article>`).join("");
+  el.shareCardType.textContent=type.name;el.shareCardTitle.textContent=type.title;el.shareCardRitual.textContent=`最強儀式：${type.behavior}`;el.shareCardFavorite.textContent=`本命：${favoriteLog.result}`;el.shareCardFortune.textContent=`運勢：${rank}`;
+}
+function buildShareText(){
+  const favorite=stageLogs.find(log=>log.stageId===favoriteId)||stageLogs.at(-1);
+  return [`私のMY儀式は「${el.resultType.textContent}」`,`称号：${el.resultTitle.textContent}`,"",`今回もっとも強い儀式：${el.strongestRitual.textContent}`,el.strongestEvidence.textContent,"",`本命：${favorite.result}`,`今日の運勢：${el.fortuneRank.textContent}（${el.fortuneHits.textContent}）`,"","見るまで確定じゃない。","#MY儀式"].join("\n");
+}
+async function shareResult(){
+  const text=buildShareText(),data={title:"MY儀式",text,url:location.origin+location.pathname};el.copyStatus.textContent="";
+  if(navigator.share){try{await navigator.share(data);return;}catch(error){if(error?.name==="AbortError")return;}}
+  const popup=window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(data.url)}`,"_blank","noopener,noreferrer");if(popup)return;
+  try{await navigator.clipboard.writeText(text);el.copyStatus.textContent="シェア画面を開けないため結果をコピーしました。";}catch{el.copyStatus.textContent="シェアできませんでした。";}
+}
+function updateDebug(action=""){
+  if(!debug.enabled){el.debugPanel.classList.add("hidden");return;}el.debugPanel.classList.remove("hidden");
+  el.debugPanel.textContent=`state=${state?.status||"-"} / stage=${state?.stage.id||"-"} / result=${state?.result?"win":"lose"} / echo=${activeEcho||"none"}${action?` / reveal=${action}`:""}\n${state?JSON.stringify(state.log,null,1):""}`;
+}
+function restart(){clearTimers();favoriteId="";playOrder=[];stageLogs=[];state=null;renderSetup();showScreen("setup");}
 
-  if (navigator.share) {
-    try {
-      await navigator.share(shareData);
-      return;
-    } catch (error) {
-      if (error?.name === "AbortError") return;
-      try {
-        await navigator.clipboard.writeText(text);
-        el.copyStatus.textContent = "シェアできないため結果をコピーしました。";
-      } catch {
-        el.copyStatus.textContent = "シェアできませんでした。";
-      }
-      return;
-    }
-  }
-
-  const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(location.href)}`;
-  const popup = window.open(xUrl, "_blank");
-  if (popup) {
-    popup.opener = null;
-    return;
-  }
-
-  try {
-    await navigator.clipboard.writeText(text);
-    el.copyStatus.textContent = "シェア画面を開けないため結果をコピーしました。";
-  } catch {
-    el.copyStatus.textContent = "シェアできませんでした。";
-  }
-}
-
-el.startBtn.addEventListener("click", startGame); el.nextBtn.addEventListener("click", nextStage); el.restartBtn.addEventListener("click", startGame); el.shareBtn.addEventListener("click", shareResult);
+el.startBtn.addEventListener("click",()=>{renderSetup();if(debug.stage&&stages.some(stage=>stage.id===debug.stage)){favoriteId=debug.stage;beginSession();}else showScreen("setup");});
+el.setupStartBtn.addEventListener("click",beginSession);
+el.nextBtn.addEventListener("click",nextStage);
+el.restartBtn.addEventListener("click",restart);
+el.shareBtn.addEventListener("click",shareResult);
+el.soundToggle.addEventListener("click",()=>{soundEnabled=!soundEnabled;saveSoundPreference();updateSoundButton();if(soundEnabled){ensureAudio();sound("click");}else if(navigator.vibrate)navigator.vibrate(0);});
+updateSoundButton();

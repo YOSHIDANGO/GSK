@@ -42,16 +42,33 @@
       </div>
     </section>
 
+    <section id="setup" class="setup-screen hidden" aria-labelledby="favoriteTitle">
+      <div class="setup-card sealed-notebook">
+        <p class="eyebrow">願いの優先順位を記録します</p>
+        <h1 id="favoriteTitle">今日、いちばん当てたいのは？</h1>
+        <p>選んだ場面は、最後に残ります。</p>
+        <div id="favoriteChoices" class="favorite-choices"></div>
+        <fieldset class="sound-choice">
+          <legend>音と振動を有効にしますか？</legend>
+          <label><input type="radio" name="sound" value="on" checked> 有効にする</label>
+          <label><input type="radio" name="sound" value="off"> 音なしで始める</label>
+        </fieldset>
+        <button id="setupStartBtn" class="primary-btn ritual-start" disabled><span>本命を封印する</span><small>BEGIN THE RITUAL</small></button>
+      </div>
+    </section>
+
     <section id="game" class="game-screen hidden" aria-live="polite">
       <header class="stage-hud">
         <div><span id="stageCount">1 / 5</span><strong id="stageTitle">兆しのランプ</strong></div>
         <p id="stagePrompt">光るかどうかは、まだ見ない。</p>
+        <button id="soundToggle" class="sound-toggle" type="button" aria-label="音と振動を切り替える" aria-pressed="true">音 ON</button>
       </header>
       <div id="experienceMount"></div>
       <div class="stage-footer">
         <p id="stageWhisper" class="stage-whisper"></p>
         <button id="nextBtn" class="next-btn hidden">次の結果へ</button>
       </div>
+      <aside id="debugPanel" class="debug-panel hidden" aria-live="polite"></aside>
     </section>
 
     <section id="result" class="result-screen archive-screen hidden" aria-live="polite">
@@ -61,6 +78,22 @@
           <img class="result-seal-icon" src="./assets/ui/app_icon_mygishiki.png" alt="" aria-hidden="true">
         </header>
         <p class="eyebrow report-kicker">封印解除済み・黒歴史儀式診断書</p>
+        <section class="replay-section" aria-labelledby="replayTitle">
+          <p class="replay-watch">ゲームは、全部見ていました。</p>
+          <h1 id="replayTitle">黒歴史リプレイ</h1>
+          <div id="replayText" class="replay-text"></div>
+        </section>
+        <section class="strongest-ritual" aria-labelledby="strongestTitle">
+          <span id="strongestTitle">今回もっとも強く観測された儀式</span>
+          <strong id="strongestRitual"></strong>
+          <p id="strongestEvidence"></p>
+        </section>
+        <section class="heatmap-section" aria-labelledby="heatmapTitle">
+          <h2 id="heatmapTitle">触れてしまった場所</h2>
+          <p>円が濃いほど、そこへ祈りが集まっています。</p>
+          <div id="heatmapGrid" class="heatmap-grid"></div>
+        </section>
+        <h2 class="archive-heading diagnosis-heading">観測されたMY儀式タイプ</h2>
         <div class="result-heading">
           <img id="resultIcon" class="result-icon" alt="">
           <div><span class="result-label">MY儀式タイプ</span><h1 id="resultType"></h1><p id="resultTitle" class="result-title"></p></div>
@@ -71,12 +104,12 @@
           <h2 id="reasonTitle">このタイプになった理由</h2>
           <p id="resultReason"></p>
         </section>
-        <div class="score-grid">
-          <div><span>信仰心</span><strong id="scoreFaith">0</strong></div>
-          <div><span>ためらい</span><strong id="scoreHesitation">0</strong></div>
-          <div><span>現実逃避</span><strong id="scoreAvoidance">0</strong></div>
-          <div><span>人間味</span><strong id="scoreHuman">0</strong></div>
-        </div>
+        <section id="favoriteResult" class="favorite-result" aria-labelledby="favoriteResultTitle">
+          <span>今日の本命</span>
+          <h2 id="favoriteResultTitle"></h2>
+          <strong id="favoriteResultOutcome"></strong>
+          <p id="favoriteResultComment"></p>
+        </section>
         <section class="fortune-card" aria-labelledby="fortuneTitle">
           <div>
             <span>当たり数</span>
@@ -88,9 +121,24 @@
           </div>
           <p id="fortuneComment"></p>
         </section>
-        <p class="evidence"><span>科学的根拠</span><strong>なし</strong><small>※魔力測定も未実施</small></p>
-        <h2 class="archive-heading">封印記録：ステージ別ログ</h2>
-        <div id="finalLog" class="final-log"></div>
+        <details class="detail-archive">
+          <summary>封印記録の詳細を開く</summary>
+          <div class="score-grid">
+            <div><span>信仰心</span><strong id="scoreFaith">0</strong></div>
+            <div><span>ためらい</span><strong id="scoreHesitation">0</strong></div>
+            <div><span>現実逃避</span><strong id="scoreAvoidance">0</strong></div>
+            <div><span>人間味</span><strong id="scoreHuman">0</strong></div>
+          </div>
+          <p class="evidence"><span>科学的根拠</span><strong>なし</strong><small>※魔力測定も未実施</small></p>
+          <h2 class="archive-heading">ステージ別ログ</h2>
+          <div id="finalLog" class="final-log"></div>
+        </details>
+        <section class="share-card" aria-label="シェア内容の要約">
+          <img src="./assets/ui/app_icon_mygishiki.png" alt="" aria-hidden="true">
+          <div><small>MY儀式・黒歴史記録</small><strong id="shareCardType"></strong><span id="shareCardTitle"></span></div>
+          <p id="shareCardRitual"></p>
+          <footer><span id="shareCardFavorite"></span><span id="shareCardFortune"></span></footer>
+        </section>
         <div class="actions">
           <button id="shareBtn" class="primary-btn">結果をシェア</button>
           <button id="restartBtn" class="ghost-btn">もう一度</button>
